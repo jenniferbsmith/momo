@@ -180,8 +180,8 @@ const Page = () => {
     
     return ( 
         <>
-            <motion.div 
-                className='flex flex-col h-[calc(100vh-56px)] gradient-background'
+            <motion.div
+                className='flex flex-col min-h-screen gradient-background'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
@@ -266,7 +266,7 @@ const Page = () => {
                         >
                             <ModeToggle />
                         </motion.div>
-            </div>
+                    </div>
                 </motion.header>
                 
                 <motion.div 
@@ -276,92 +276,176 @@ const Page = () => {
                     transition={{ duration: 0.8, delay: 0.4 }}
                 />
                 
-                {selectedImage ? (
-                    <div className='flex flex-col md:flex-row items-start justify-start gap-4 md:gap-10 w-full h-full px-4 md:px-10 mt-2 pb-16 md:pb-4 overflow-auto'>
-                        <div className="flex flex-col items-center md:items-start justify-start w-full md:w-1/2 gap-4">
+                <AnimatePresence>
+                    {selectedImage ? (
+                        <motion.div 
+                            className='flex flex-col md:flex-row items-start justify-start gap-6 md:gap-12 w-full flex-1 px-4 md:px-10 mt-8 pb-20 md:pb-8 overflow-auto max-w-7xl mx-auto'
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <motion.div 
+                                className="flex flex-col items-center md:items-start justify-start w-full md:w-1/2 gap-6"
+                                initial={{ opacity: 0, x: -30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                            >
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
-                            <div className="min-h-[300px] w-full max-w-[500px] p-2 md:p-4 border border-border rounded-lg relative overflow-hidden">
-                                {isImageSetupDone ? (
-                                    <Image
-                                        src={selectedImage} 
-                                        alt="Uploaded"
-                                        layout="fill"
-                                        objectFit="contain" 
-                                        objectPosition="center" 
-                                    />
-                                ) : (
-                                    <div className='absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm'>
-                                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 text-base md:text-lg font-semibold animate-pulse text-center px-4">
-                                            <ReloadIcon className='h-5 w-5 md:h-6 md:w-6 animate-spin' /> 
-                                            <span>Analyzing picture...</span>
-                                        </div>
-                                    </div>
+                                <motion.div 
+                                    className="min-h-[600px] w-full max-w-[700px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
+                                    whileHover={{ scale: 1.01 }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                    {isImageSetupDone ? (
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{ duration: 0.6 }}
+                                        >
+                                            <Image
+                                                src={selectedImage} 
+                                                alt="Uploaded"
+                                                layout="fill"
+                                                objectFit="contain" 
+                                                objectPosition="center"
+                                                className="rounded-lg"
+                                            />
+                                        </motion.div>
+                                    ) : (
+                                        <motion.div 
+                                            className='absolute inset-0 flex items-center justify-center glass rounded-lg'
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.4 }}
+                                        >
+                                            <motion.div 
+                                                className="flex flex-col md:flex-row items-center gap-2 md:gap-3 text-base md:text-lg font-semibold text-center px-4"
+                                                animate={{ scale: [1, 1.05, 1] }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                            >
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                                >
+                                                    <ReloadIcon className='h-5 w-5 md:h-6 md:w-6 text-primary' /> 
+                                                </motion.div>
+                                                <span className="text-gradient">Analyzing picture...</span>
+                                            </motion.div>
+                                        </motion.div>
                                 )}
-                                {isImageSetupDone && textSets.map(textSet => (
-                                    <div
-                                        key={textSet.id}
-                                        style={{
-                                            position: 'absolute',
-                                            top: `${50 - textSet.top}%`,
-                                            left: `${textSet.left + 50}%`,
-                                            transform: `
-                                                translate(-50%, -50%) 
-                                                rotate(${textSet.rotation}deg)
-                                                perspective(1000px)
-                                                rotateX(${textSet.tiltX}deg)
-                                                rotateY(${textSet.tiltY}deg)
-                                            `,
-                                            color: textSet.color,
-                                            textAlign: 'center',
-                                            fontSize: `${textSet.fontSize}px`,
-                                            fontWeight: textSet.fontWeight,
-                                            fontFamily: textSet.fontFamily,
-                                            opacity: textSet.opacity,
-                                            letterSpacing: `${textSet.letterSpacing}px`,
-                                            transformStyle: 'preserve-3d'
-                                        }}
-                                    >
-                                        {textSet.text}
-                                    </div>
-                                ))}
-                                {removedBgImageUrl && (
-                                    <Image
-                                        src={removedBgImageUrl}
-                                        alt="Removed bg"
-                                        layout="fill"
-                                        objectFit="contain" 
-                                        objectPosition="center" 
-                                        className="absolute top-0 left-0 w-full h-full"
-                                    /> 
-                                )}
-                            </div>
-            </div>
+                                    <AnimatePresence>
+                                        {isImageSetupDone && textSets.map((textSet, index) => (
+                                            <motion.div
+                                                key={textSet.id}
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: textSet.opacity, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                transition={{ duration: 0.3, delay: index * 0.1 }}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: `${50 - textSet.top}%`,
+                                                    left: `${textSet.left + 50}%`,
+                                                    transform: `
+                                                        translate(-50%, -50%) 
+                                                        rotate(${textSet.rotation}deg)
+                                                        perspective(1000px)
+                                                        rotateX(${textSet.tiltX}deg)
+                                                        rotateY(${textSet.tiltY}deg)
+                                                    `,
+                                                    color: textSet.color,
+                                                    textAlign: 'center',
+                                                    fontSize: `${textSet.fontSize}px`,
+                                                    fontWeight: textSet.fontWeight,
+                                                    fontFamily: textSet.fontFamily,
+                                                    letterSpacing: `${textSet.letterSpacing}px`,
+                                                    transformStyle: 'preserve-3d'
+                                                }}
+                                            >
+                                                {textSet.text}
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
+                                    {removedBgImageUrl && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.8, delay: 0.5 }}
+                                        >
+                                            <Image
+                                                src={removedBgImageUrl}
+                                                alt="Removed bg"
+                                                layout="fill"
+                                                objectFit="contain" 
+                                                objectPosition="center" 
+                                                className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                            /> 
+                                        </motion.div>
+                                    )}
+                                </motion.div>
+                            </motion.div>
 
-                        <div className='flex flex-col w-full md:w-1/2'>
-                            <Button variant={'secondary'} onClick={addNewTextSet} className="mb-2 hidden md:flex"><PlusIcon className='mr-2'/> Add New Text</Button>
-                            <ScrollArea className="h-[calc(100vh-240px)] md:h-[calc(100vh-200px)] rounded-md border p-2">
-                                <Accordion type="single" collapsible className="w-full">
-                                    {textSets.map(textSet => (
-                                        <TextCustomizer 
-                                            key={textSet.id}
-                                            textSet={textSet}
-                                            handleAttributeChange={handleAttributeChange}
-                                            removeTextSet={removeTextSet}
-                                            duplicateTextSet={duplicateTextSet}
-                                        />
-                                    ))}
-                                </Accordion>
-                            </ScrollArea>
-                        </div>
-                    </div>
-                ) : (
-                    <motion.div 
-                        className='flex items-center justify-center flex-1 w-full p-8 text-center animated-bg'
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.8 }}
-                    >
+                            <motion.div 
+                                className='flex flex-col w-full md:w-1/2'
+                                initial={{ opacity: 0, x: 30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                            >
+                                <motion.div
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    <Button 
+                                        variant={'secondary'} 
+                                        onClick={addNewTextSet} 
+                                        className="mb-4 hidden md:flex gap-2 professional-card border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
+                                    >
+                                        <motion.div
+                                            animate={{ rotate: [0, 90, 0] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                        >
+                                            <PlusIcon className='w-4 h-4 text-primary'/>
+                                        </motion.div>
+                                        Add New Text
+                                    </Button>
+                                </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.6 }}
+                                >
+                                    <ScrollArea className="h-[calc(100vh-300px)] md:h-[calc(100vh-280px)] rounded-md border p-2 professional-card custom-scrollbar">
+                                        <Accordion type="single" collapsible className="w-full">
+                                            {textSets.map((textSet, index) => (
+                                                <motion.div
+                                                    key={textSet.id}
+                                                    initial={{ opacity: 0, x: 20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: -20 }}
+                                                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                                                >
+                                                    <TextCustomizer 
+                                                        textSet={textSet}
+                                                        handleAttributeChange={handleAttributeChange}
+                                                        removeTextSet={removeTextSet}
+                                                        duplicateTextSet={duplicateTextSet}
+                                                    />
+                                                </motion.div>
+                                            ))}
+                                        </Accordion>
+                                    </ScrollArea>
+                                </motion.div>
+                            </motion.div>
+                        </motion.div>
+                    ) : (
+                        <motion.div 
+                            className='flex items-center justify-center flex-1 w-full p-8 text-center animated-bg'
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.8 }}
+                        >
                         <motion.div 
                             className="max-w-2xl space-y-8 professional-card p-8 md:p-12 rounded-3xl hover-lift"
                             initial={{ scale: 0.8, opacity: 0 }}
@@ -478,9 +562,10 @@ const Page = () => {
                                     </motion.div>
                                 </Button>
                             </motion.div>
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
-                )} 
+                    )}
+                </AnimatePresence>
             </motion.div>
             
             <MobileNav 
