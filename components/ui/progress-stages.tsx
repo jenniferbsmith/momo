@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Wand2, Zap, Eye, CheckCircle } from 'lucide-react';
+import { Sparkles, Wand2, Zap, Eye, CheckCircle, Brain, Layers, Palette } from 'lucide-react';
 
 interface ProgressStagesProps {
     isVisible: boolean;
@@ -21,27 +21,48 @@ const ProgressStages: React.FC<ProgressStagesProps> = ({ isVisible }) => {
         },
         {
             id: 2,
+            icon: Brain,
+            title: "AI Deep Learning Analysis",
+            description: "Understanding image content",
+            gradient: "from-cyan-500 to-blue-500"
+        },
+        {
+            id: 3,
             icon: Eye,
             title: "Analyzing Image Structure",
             description: "Identifying key elements",
             gradient: "from-blue-500 to-cyan-500"
         },
         {
-            id: 3,
+            id: 4,
+            icon: Layers,
+            title: "Mapping Object Boundaries",
+            description: "Detecting precise edges",
+            gradient: "from-teal-500 to-green-500"
+        },
+        {
+            id: 5,
             icon: Wand2,
             title: "Applying AI Magic",
             description: "Separating background layers",
             gradient: "from-green-500 to-emerald-500"
         },
         {
-            id: 4,
+            id: 6,
+            icon: Palette,
+            title: "Color Correction & Enhancement",
+            description: "Perfecting visual quality",
+            gradient: "from-yellow-500 to-orange-500"
+        },
+        {
+            id: 7,
             icon: Zap,
             title: "Processing Background",
             description: "Removing unwanted elements",
             gradient: "from-orange-500 to-red-500"
         },
         {
-            id: 5,
+            id: 8,
             icon: CheckCircle,
             title: "Finalizing Results",
             description: "Preparing your masterpiece",
@@ -62,7 +83,7 @@ const ProgressStages: React.FC<ProgressStagesProps> = ({ isVisible }) => {
                 }
                 return prev;
             });
-        }, 5000);
+        }, 7000);
 
         return () => clearInterval(timer);
     }, [isVisible, stages.length]);

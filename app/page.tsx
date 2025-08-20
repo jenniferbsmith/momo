@@ -419,7 +419,7 @@ const Page = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.8, delay: 0.6 }}
                                 >
-                                    <ScrollArea className="h-[calc(100vh-300px)] md:h-[calc(100vh-280px)] rounded-md border p-2 professional-card custom-scrollbar">
+                                    <ScrollArea className="h-[calc(100vh-223px)] md:h-[calc(100vh-203px)] rounded-md border p-2 professional-card custom-scrollbar">
                                         <Accordion type="single" collapsible className="w-full">
                                             {textSets.map((textSet, index) => (
                                                 <motion.div
