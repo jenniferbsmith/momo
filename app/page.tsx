@@ -13,17 +13,7 @@ import TextCustomizer from '@/components/editor/text-customizer';
 import MobileNav from '@/components/ui/mobile-nav';
 
 import { PlusIcon, ReloadIcon } from '@radix-ui/react-icons';
-import { 
-  Upload, 
-  Download, 
-  Sparkles, 
-  Wand2, 
-  ImageIcon,
-  Type,
-  Layers,
-  Palette,
-  Zap
-} from 'lucide-react';
+import { Upload, Sparkles, Wand2, Zap, Type } from 'lucide-react';
 
 import { removeBackground } from "@imgly/background-removal";
 
@@ -197,88 +187,86 @@ const Page = () => {
                 transition={{ duration: 0.6 }}
             >
                 <motion.header 
-                    className='sticky top-0 z-50 glass border-b border-border/20 p-4 md:p-6'
-                    initial={{ y: -100, opacity: 0 }}
+                    className='sticky top-0 z-50 glass border-b border-border/20 flex flex-row items-center justify-between p-3 md:p-5 px-4 md:px-10'
+                    initial={{ y: -50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
                 >
-                    <div className='flex flex-row items-center justify-between max-w-7xl mx-auto'>
+                    <motion.div 
+                        className="flex items-center gap-3"
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
                         <motion.div 
-                            className="flex items-center gap-3"
-                            whileHover={{ scale: 1.02 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                            className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent text-primary-foreground"
+                            animate={{ rotate: [0, 5, -5, 0] }}
+                            transition={{ duration: 4, repeat: Infinity }}
                         >
-                            <motion.div 
-                                className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent text-primary-foreground"
-                                animate={{ rotate: [0, 5, -5, 0] }}
-                                transition={{ duration: 4, repeat: Infinity }}
+                            <Wand2 className="w-6 h-6" />
+                        </motion.div>
+                        <div>
+                            <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                                <span className="block md:hidden">Text Behind Image</span>
+                                <span className="hidden md:block">Text Behind Image Studio</span>
+                            </h2>
+                            <p className="text-xs md:text-sm text-muted-foreground hidden md:block">
+                                Professional text-behind-image editor
+                            </p>
+                        </div>
+                    </motion.div>
+                    
+                    <div className='flex gap-2 md:gap-4 items-center'>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                            onChange={handleFileChange}
+                            accept=".jpg, .jpeg, .png"
+                        />
+                        
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                        >
+                            <Button 
+                                onClick={handleUploadImage} 
+                                size="sm" 
+                                className="hidden md:flex md:size-default gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-300 glow"
                             >
-                                <Wand2 className="w-6 h-6" />
-                            </motion.div>
-                            <div>
-                                <h1 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                                    <span className="block md:hidden">Text Behind Image</span>
-                                    <span className="hidden md:block">Text Behind Image Studio</span>
-                                </h1>
-                                <p className="text-xs md:text-sm text-muted-foreground hidden md:block">
-                                    Professional text-behind-image editor
-                                </p>
-                            </div>
+                                <Upload className="w-4 h-4" />
+                                Upload
+                            </Button>
                         </motion.div>
                         
-                        <div className='flex gap-3 items-center'>
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                style={{ display: 'none' }}
-                                onChange={handleFileChange}
-                                accept=".jpg, .jpeg, .png"
-                            />
-                            
-                            <motion.div
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                <Button 
-                                    onClick={handleUploadImage} 
-                                    size="sm" 
-                                    className="hidden md:flex gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-300 glow"
+                        <AnimatePresence>
+                            {selectedImage && (
+                                <motion.div
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0, opacity: 0 }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
-                                    <Upload className="w-4 h-4" />
-                                    Upload Image
-                                </Button>
-                            </motion.div>
-                            
-                            <AnimatePresence>
-                                {selectedImage && (
-                                    <motion.div
-                                        initial={{ scale: 0, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        exit={{ scale: 0, opacity: 0 }}
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
+                                    <Button 
+                                        onClick={saveCompositeImage} 
+                                        size="sm" 
+                                        className="hidden md:flex md:size-default gap-2 border-primary/50 hover:bg-primary/10 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-300"
+                                        variant="outline"
                                     >
-                                        <Button 
-                                            onClick={saveCompositeImage} 
-                                            size="sm" 
-                                            variant="outline" 
-                                            className="hidden md:flex gap-2 border-primary/50 hover:bg-primary/10 hover:border-primary shadow-lg hover:shadow-xl transition-all duration-300"
-                                        >
-                                            <Download className="w-4 h-4" />
-                                            Save Design
-                                        </Button>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                            
-                            <motion.div
-                                whileHover={{ rotate: 180 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <ModeToggle />
-                            </motion.div>
-                        </div>
-                    </div>
+                                        <Upload className="w-4 h-4" />
+                                        Save
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                        
+                        <motion.div
+                            whileHover={{ rotate: 180 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <ModeToggle />
+                        </motion.div>
+            </div>
                 </motion.header>
                 
                 <motion.div 
@@ -286,376 +274,218 @@ const Page = () => {
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                /> 
+                />
                 
-                <AnimatePresence>
-                    {selectedImage ? (
+                {selectedImage ? (
+                    <div className='flex flex-col md:flex-row items-start justify-start gap-4 md:gap-10 w-full h-full px-4 md:px-10 mt-2 pb-16 md:pb-4 overflow-auto'>
+                        <div className="flex flex-col items-center md:items-start justify-start w-full md:w-1/2 gap-4">
+                            <canvas ref={canvasRef} style={{ display: 'none' }} />
+                            
+                            <div className="min-h-[300px] w-full max-w-[500px] p-2 md:p-4 border border-border rounded-lg relative overflow-hidden">
+                                {isImageSetupDone ? (
+                                    <Image
+                                        src={selectedImage} 
+                                        alt="Uploaded"
+                                        layout="fill"
+                                        objectFit="contain" 
+                                        objectPosition="center" 
+                                    />
+                                ) : (
+                                    <div className='absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm'>
+                                        <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3 text-base md:text-lg font-semibold animate-pulse text-center px-4">
+                                            <ReloadIcon className='h-5 w-5 md:h-6 md:w-6 animate-spin' /> 
+                                            <span>Analyzing picture...</span>
+                                        </div>
+                                    </div>
+                                )}
+                                {isImageSetupDone && textSets.map(textSet => (
+                                    <div
+                                        key={textSet.id}
+                                        style={{
+                                            position: 'absolute',
+                                            top: `${50 - textSet.top}%`,
+                                            left: `${textSet.left + 50}%`,
+                                            transform: `
+                                                translate(-50%, -50%) 
+                                                rotate(${textSet.rotation}deg)
+                                                perspective(1000px)
+                                                rotateX(${textSet.tiltX}deg)
+                                                rotateY(${textSet.tiltY}deg)
+                                            `,
+                                            color: textSet.color,
+                                            textAlign: 'center',
+                                            fontSize: `${textSet.fontSize}px`,
+                                            fontWeight: textSet.fontWeight,
+                                            fontFamily: textSet.fontFamily,
+                                            opacity: textSet.opacity,
+                                            letterSpacing: `${textSet.letterSpacing}px`,
+                                            transformStyle: 'preserve-3d'
+                                        }}
+                                    >
+                                        {textSet.text}
+                                    </div>
+                                ))}
+                                {removedBgImageUrl && (
+                                    <Image
+                                        src={removedBgImageUrl}
+                                        alt="Removed bg"
+                                        layout="fill"
+                                        objectFit="contain" 
+                                        objectPosition="center" 
+                                        className="absolute top-0 left-0 w-full h-full"
+                                    /> 
+                                )}
+                            </div>
+            </div>
+
+                        <div className='flex flex-col w-full md:w-1/2'>
+                            <Button variant={'secondary'} onClick={addNewTextSet} className="mb-2 hidden md:flex"><PlusIcon className='mr-2'/> Add New Text</Button>
+                            <ScrollArea className="h-[calc(100vh-240px)] md:h-[calc(100vh-200px)] rounded-md border p-2">
+                                <Accordion type="single" collapsible className="w-full">
+                                    {textSets.map(textSet => (
+                                        <TextCustomizer 
+                                            key={textSet.id}
+                                            textSet={textSet}
+                                            handleAttributeChange={handleAttributeChange}
+                                            removeTextSet={removeTextSet}
+                                            duplicateTextSet={duplicateTextSet}
+                                        />
+                                    ))}
+                                </Accordion>
+                            </ScrollArea>
+                        </div>
+                    </div>
+                ) : (
+                    <motion.div 
+                        className='flex items-center justify-center flex-1 w-full p-8 text-center animated-bg'
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.8 }}
+                    >
                         <motion.div 
-                            className='flex flex-col md:flex-row items-start justify-start gap-6 md:gap-12 w-full h-full px-4 md:px-10 mt-6 pb-16 md:pb-6 overflow-auto max-w-7xl mx-auto'
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.6 }}
+                            className="max-w-2xl space-y-8 professional-card p-8 md:p-12 rounded-3xl hover-lift"
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
                         >
                             <motion.div 
-                                className="flex flex-col items-center md:items-start justify-start w-full md:w-1/2 gap-6"
-                                initial={{ opacity: 0, x: -50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                            >
-                                <canvas ref={canvasRef} style={{ display: 'none' }} />
-                                
-                                <motion.div 
-                                    className="min-h-[500px] w-full max-w-[600px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
-                                    whileHover={{ scale: 1.02 }}
-                                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    
-                                    {isImageSetupDone ? (
-                                        <motion.div
-                                            className="relative w-full h-full"
-                                            initial={{ opacity: 0, scale: 0.8 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ duration: 0.6 }}
-                                        >
-                                            <Image
-                                                src={selectedImage} 
-                                                alt="Uploaded"
-                                                layout="fill"
-                                                objectFit="contain" 
-                                                objectPosition="center"
-                                                className="rounded-lg"
-                                            />
-                                        </motion.div>
-                                    ) : (
-                                        <motion.div 
-                                            className='absolute inset-0 flex items-center justify-center glass rounded-lg'
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ duration: 0.4 }}
-                                        >
-                                            <motion.div 
-                                                className="flex flex-col items-center gap-4 text-center px-6"
-                                                initial={{ scale: 0.8 }}
-                                                animate={{ scale: 1 }}
-                                                transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
-                                            >
-                                                <motion.div
-                                                    animate={{ rotate: 360 }}
-                                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                                >
-                                                    <Zap className='h-8 w-8 text-primary' /> 
-                                                </motion.div>
-                                                <div className="space-y-2">
-                                                    <p className="text-lg font-semibold text-gradient">AI Processing Image</p>
-                                                    <p className="text-sm text-muted-foreground">Analyzing and removing background...</p>
-                                                </div>
-                                            </motion.div>
-                                        </motion.div>
-                                    )}
-                                    
-                                    <AnimatePresence>
-                                        {isImageSetupDone && textSets.map((textSet, index) => (
-                                            <motion.div
-                                                key={textSet.id}
-                                                initial={{ opacity: 0, scale: 0.5 }}
-                                                animate={{ opacity: textSet.opacity, scale: 1 }}
-                                                exit={{ opacity: 0, scale: 0.5 }}
-                                                transition={{ duration: 0.3, delay: index * 0.1 }}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: `${50 - textSet.top}%`,
-                                                    left: `${textSet.left + 50}%`,
-                                                    transform: `
-                                                        translate(-50%, -50%) 
-                                                        rotate(${textSet.rotation}deg)
-                                                        perspective(1000px)
-                                                        rotateX(${textSet.tiltX}deg)
-                                                        rotateY(${textSet.tiltY}deg)
-                                                    `,
-                                                    color: textSet.color,
-                                                    textAlign: 'center',
-                                                    fontSize: `${textSet.fontSize}px`,
-                                                    fontWeight: textSet.fontWeight,
-                                                    fontFamily: textSet.fontFamily,
-                                                    letterSpacing: `${textSet.letterSpacing}px`,
-                                                    transformStyle: 'preserve-3d',
-                                                    textShadow: `0 0 10px ${textSet.color}30`,
-                                                    filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3))'
-                                                }}
-                                            >
-                                                {textSet.text}
-                                            </motion.div>
-                                        ))}
-                                    </AnimatePresence>
-                                    
-                                    {removedBgImageUrl && (
-                                        <motion.div
-                                            className="absolute inset-0"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ duration: 0.8, delay: 0.5 }}
-                                        >
-                                            <Image
-                                                src={removedBgImageUrl}
-                                                alt="Removed bg"
-                                                layout="fill"
-                                                objectFit="contain" 
-                                                objectPosition="center" 
-                                                className="rounded-lg"
-                                            /> 
-                                        </motion.div>
-                                    )}
-                                </motion.div>
-                                
-                                <motion.div 
-                                    className="w-full max-w-[600px] professional-card p-4 rounded-xl space-y-3"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 0.8 }}
-                                >
-                                    <div className="flex items-center gap-2">
-                                        <ImageIcon className="w-5 h-5 text-primary" />
-                                        <h3 className="font-semibold text-gradient">Image Preview</h3>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4 text-sm">
-                                        <div className="flex items-center gap-2">
-                                            <Layers className="w-4 h-4 text-muted-foreground" />
-                                            <span className="text-muted-foreground">Text Layers: {textSets.length}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Sparkles className="w-4 h-4 text-muted-foreground" />
-                                            <span className="text-muted-foreground">Background: {isImageSetupDone ? 'Processed' : 'Processing'}</span>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </motion.div>
-
-                            <motion.div 
-                                className='flex flex-col w-full md:w-1/2 gap-6'
-                                initial={{ opacity: 0, x: 50 }}
-                                animate={{ opacity: 1, x: 0 }}
+                                className="flex justify-center mb-8"
+                                initial={{ y: -30, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
                             >
-                                <motion.div
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
+                                <motion.div 
+                                    className="relative"
+                                    animate={{ 
+                                        rotateY: [0, 360],
+                                        scale: [1, 1.1, 1]
+                                    }}
+                                    transition={{ 
+                                        rotateY: { duration: 4, repeat: Infinity, ease: "linear" },
+                                        scale: { duration: 2, repeat: Infinity }
+                                    }}
                                 >
-                                    <Button 
-                                        variant={'outline'} 
-                                        onClick={addNewTextSet} 
-                                        className="w-full hidden md:flex gap-3 p-4 h-auto professional-card border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
-                                    >
-                                        <motion.div
-                                            animate={{ rotate: [0, 90, 0] }}
-                                            transition={{ duration: 2, repeat: Infinity }}
-                                        >
-                                            <Type className='w-5 h-5 text-primary'/>
-                                        </motion.div>
-                                        <div className="flex flex-col items-start">
-                                            <span className="font-semibold">Add New Text Layer</span>
-                                            <span className="text-xs text-muted-foreground">Create stunning text effects</span>
-                                        </div>
-                                    </Button>
+                                    <div className="w-20 h-20 bg-gradient-to-br from-primary via-accent to-primary rounded-2xl flex items-center justify-center glow animate-pulse-glow">
+                                        <Wand2 className="w-10 h-10 text-white" />
+                                    </div>
+                                    <motion.div
+                                        className="absolute -top-2 -right-2 w-4 h-4 bg-accent rounded-full"
+                                        animate={{ 
+                                            scale: [0, 1, 0],
+                                            opacity: [0, 1, 0]
+                                        }}
+                                        transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                                    />
+                                    <motion.div
+                                        className="absolute -bottom-1 -left-1 w-3 h-3 bg-primary rounded-full"
+                                        animate={{ 
+                                            scale: [0, 1, 0],
+                                            opacity: [0, 1, 0]
+                                        }}
+                                        transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                                    />
                                 </motion.div>
+                            </motion.div>
+                            
+                            <motion.div 
+                                className="space-y-6"
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 0.8, delay: 0.6 }}
+                            >
+                                <h1 className="text-3xl md:text-5xl font-bold text-gradient leading-tight">
+                                    Create Stunning
+                                    <br />
+                                    Text Behind Images
+                                </h1>
+                                
+                                <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
+                                    Professional AI-powered editor for creating breathtaking text-behind-image designs. 
+                                    Upload your image and let the magic begin.
+                                </p>
                                 
                                 <motion.div 
-                                    className="professional-card rounded-2xl p-4 flex-1 min-h-[400px] hover-lift"
+                                    className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.8, delay: 0.6 }}
+                                    transition={{ duration: 0.8, delay: 0.8 }}
                                 >
-                                    <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border/20">
-                                        <motion.div
-                                            animate={{ scale: [1, 1.1, 1] }}
-                                            transition={{ duration: 2, repeat: Infinity }}
+                                    {[
+                                        { icon: Zap, title: "AI Processing", desc: "Smart background removal" },
+                                        { icon: Type, title: "Rich Typography", desc: "Advanced text controls" },
+                                        { icon: Sparkles, title: "Pro Effects", desc: "Stunning visual results" }
+                                    ].map((feature, index) => (
+                                        <motion.div 
+                                            key={feature.title}
+                                            className="flex flex-col items-center p-4 rounded-xl glass hover-lift group"
+                                            whileHover={{ scale: 1.05 }}
+                                            transition={{ delay: index * 0.1 }}
                                         >
-                                            <Palette className="w-6 h-6 text-primary" />
+                                            <motion.div
+                                                className="mb-3 p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                                                animate={{ rotate: [0, 5, -5, 0] }}
+                                                transition={{ duration: 4, repeat: Infinity, delay: index * 0.5 }}
+                                            >
+                                                <feature.icon className="w-6 h-6 text-primary" />
+                                            </motion.div>
+                                            <h3 className="font-semibold text-sm">{feature.title}</h3>
+                                            <p className="text-xs text-muted-foreground text-center">{feature.desc}</p>
                                         </motion.div>
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-gradient">Text Customizer</h3>
-                                            <p className="text-sm text-muted-foreground">Fine-tune your text layers</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <ScrollArea className="h-[calc(100vh-400px)] custom-scrollbar pr-2">
-                                        <AnimatePresence>
-                                            {textSets.length === 0 ? (
-                                                <motion.div 
-                                                    className="flex flex-col items-center justify-center h-48 text-center space-y-4"
-                                                    initial={{ opacity: 0, scale: 0.8 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    exit={{ opacity: 0, scale: 0.8 }}
-                                                >
-                                                    <motion.div
-                                                        animate={{ y: [0, -10, 0] }}
-                                                        transition={{ duration: 2, repeat: Infinity }}
-                                                    >
-                                                        <Type className="w-12 h-12 text-muted-foreground/50" />
-                                                    </motion.div>
-                                                    <div>
-                                                        <p className="text-muted-foreground font-medium">No text layers yet</p>
-                                                        <p className="text-sm text-muted-foreground/70">Add your first text layer to get started</p>
-                                                    </div>
-                                                </motion.div>
-                                            ) : (
-                                                <Accordion type="single" collapsible className="w-full space-y-3">
-                                                    {textSets.map((textSet, index) => (
-                                                        <motion.div
-                                                            key={textSet.id}
-                                                            initial={{ opacity: 0, x: 20 }}
-                                                            animate={{ opacity: 1, x: 0 }}
-                                                            exit={{ opacity: 0, x: -20 }}
-                                                            transition={{ duration: 0.3, delay: index * 0.1 }}
-                                                        >
-                                                            <TextCustomizer 
-                                                                textSet={textSet}
-                                                                handleAttributeChange={handleAttributeChange}
-                                                                removeTextSet={removeTextSet}
-                                                                duplicateTextSet={duplicateTextSet}
-                                                            />
-                                                        </motion.div>
-                                                    ))}
-                                                </Accordion>
-                                            )}
-                                        </AnimatePresence>
-                                    </ScrollArea>
+                                    ))}
                                 </motion.div>
                             </motion.div>
-                        </motion.div>
-                    ) : (
-                        <motion.div 
-                            className='flex items-center justify-center flex-1 w-full p-8 text-center animated-bg'
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <motion.div 
-                                className="max-w-2xl space-y-8 professional-card p-8 md:p-12 rounded-3xl hover-lift"
+                            
+                            <motion.div
                                 initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
+                                transition={{ duration: 0.8, delay: 1 }}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                             >
-                                <motion.div 
-                                    className="flex justify-center mb-8"
-                                    initial={{ y: -50, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ duration: 0.8, delay: 0.4 }}
+                                <Button 
+                                    onClick={handleUploadImage} 
+                                    size="lg" 
+                                    className="text-lg px-8 py-4 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-xl hover:shadow-2xl transition-all duration-500 glow animate-pulse-glow group"
                                 >
-                                    <motion.div 
-                                        className="relative"
-                                        animate={{ 
-                                            rotateY: [0, 360],
-                                            scale: [1, 1.1, 1]
-                                        }}
-                                        transition={{ 
-                                            rotateY: { duration: 4, repeat: Infinity, ease: "linear" },
-                                            scale: { duration: 2, repeat: Infinity }
-                                        }}
+                                    <motion.div
+                                        className="flex items-center gap-3"
+                                        animate={{ x: [0, 3, 0] }}
+                                        transition={{ duration: 2, repeat: Infinity }}
                                     >
-                                        <div className="w-20 h-20 bg-gradient-to-br from-primary via-accent to-primary rounded-2xl flex items-center justify-center glow animate-pulse-glow">
-                                            <Wand2 className="w-10 h-10 text-white" />
-                                        </div>
-                                        <motion.div
-                                            className="absolute -top-2 -right-2 w-4 h-4 bg-accent rounded-full"
-                                            animate={{ 
-                                                scale: [0, 1, 0],
-                                                opacity: [0, 1, 0]
-                                            }}
-                                            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                                        />
-                                        <motion.div
-                                            className="absolute -bottom-1 -left-1 w-3 h-3 bg-primary rounded-full"
-                                            animate={{ 
-                                                scale: [0, 1, 0],
-                                                opacity: [0, 1, 0]
-                                            }}
-                                            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                                        />
+                                        <Upload className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                        Upload an Image
+                                        <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                                     </motion.div>
-                                </motion.div>
-                                
-                                <motion.div 
-                                    className="space-y-6"
-                                    initial={{ y: 30, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ duration: 0.8, delay: 0.6 }}
-                                >
-                                    <h1 className="text-3xl md:text-5xl font-bold text-gradient leading-tight">
-                                        Create Stunning
-                                        <br />
-                                        Text Behind Images
-                                    </h1>
-                                    
-                                    <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
-                                        Professional AI-powered editor for creating breathtaking text-behind-image designs. 
-                                        Upload your image and let the magic begin.
-                                    </p>
-                                    
-                                    <motion.div 
-                                        className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.8, delay: 0.8 }}
-                                    >
-                                        {[
-                                            { icon: Zap, title: "AI Processing", desc: "Smart background removal" },
-                                            { icon: Type, title: "Rich Typography", desc: "Advanced text controls" },
-                                            { icon: Sparkles, title: "Pro Effects", desc: "Stunning visual results" }
-                                        ].map((feature, index) => (
-                                            <motion.div 
-                                                key={feature.title}
-                                                className="flex flex-col items-center p-4 rounded-xl glass hover-lift group"
-                                                whileHover={{ scale: 1.05 }}
-                                                transition={{ delay: index * 0.1 }}
-                                            >
-                                                <motion.div
-                                                    className="mb-3 p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
-                                                    animate={{ rotate: [0, 5, -5, 0] }}
-                                                    transition={{ duration: 4, repeat: Infinity, delay: index * 0.5 }}
-                                                >
-                                                    <feature.icon className="w-6 h-6 text-primary" />
-                                                </motion.div>
-                                                <h3 className="font-semibold text-sm">{feature.title}</h3>
-                                                <p className="text-xs text-muted-foreground text-center">{feature.desc}</p>
-                                            </motion.div>
-                                        ))}
-                                    </motion.div>
-                                </motion.div>
-                                
-                                <motion.div
-                                    initial={{ scale: 0.8, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    transition={{ duration: 0.8, delay: 1 }}
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <Button 
-                                        onClick={handleUploadImage} 
-                                        size="lg" 
-                                        className="text-lg px-8 py-4 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-xl hover:shadow-2xl transition-all duration-500 glow animate-pulse-glow group"
-                                    >
-                                        <motion.div
-                                            className="flex items-center gap-3"
-                                            animate={{ x: [0, 5, 0] }}
-                                            transition={{ duration: 2, repeat: Infinity }}
-                                        >
-                                            <Upload className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                                            Upload Your Image
-                                            <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                                        </motion.div>
-                                    </Button>
-                                </motion.div>
+                                </Button>
                             </motion.div>
                         </motion.div>
-                    )}
-                </AnimatePresence>
+                    </motion.div>
+                )} 
             </motion.div>
             
             <MobileNav 
-                isVisible={Boolean(selectedImage)}
-                canSave={Boolean(selectedImage && isImageSetupDone)}
+                isVisible={!!selectedImage}
+                canSave={!!selectedImage && isImageSetupDone}
                 onUpload={handleUploadImage}
                 onSave={saveCompositeImage}
                 onAddText={addNewTextSet}
