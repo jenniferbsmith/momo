@@ -447,13 +447,13 @@ const Page = () => {
                             transition={{ duration: 0.8 }}
                         >
                         <motion.div 
-                            className="max-w-2xl space-y-8 professional-card p-8 md:p-12 rounded-3xl hover-lift"
+                            className="max-w-xl space-y-4 professional-card p-6 md:p-8 rounded-3xl hover-lift"
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
                         >
                             <motion.div 
-                                className="flex justify-center mb-8"
+                                className="flex justify-center mb-6"
                                 initial={{ y: -30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
@@ -469,8 +469,8 @@ const Page = () => {
                                         scale: { duration: 2, repeat: Infinity }
                                     }}
                                 >
-                                    <div className="w-20 h-20 bg-gradient-to-br from-primary via-accent to-primary rounded-2xl flex items-center justify-center glow animate-pulse-glow">
-                                        <Wand2 className="w-10 h-10 text-white" />
+                                    <div className="w-16 h-16 bg-gradient-to-br from-primary via-accent to-primary rounded-2xl flex items-center justify-center glow animate-pulse-glow">
+                                        <Wand2 className="w-8 h-8 text-white" />
                                     </div>
                                     <motion.div
                                         className="absolute -top-2 -right-2 w-4 h-4 bg-accent rounded-full"
@@ -492,24 +492,24 @@ const Page = () => {
                             </motion.div>
                             
                             <motion.div 
-                                className="space-y-6"
+                                className="space-y-4"
                                 initial={{ y: 20, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8, delay: 0.6 }}
                             >
-                                <h1 className="text-3xl md:text-5xl font-bold text-gradient leading-tight">
+                                <h1 className="text-2xl md:text-4xl font-bold text-gradient leading-tight">
                                     Create Stunning
                                     <br />
                                     Text Behind Images
                                 </h1>
                                 
-                                <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
+                                <p className="text-base md:text-lg text-muted-foreground max-w-md mx-auto leading-relaxed">
                                     Professional AI-powered editor for creating breathtaking text-behind-image designs. 
                                     Upload your image and let the magic begin.
                                 </p>
                                 
                                 <motion.div 
-                                    className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
+                                    className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.8, delay: 0.8 }}
@@ -521,18 +521,18 @@ const Page = () => {
                                     ].map((feature, index) => (
                                         <motion.div 
                                             key={feature.title}
-                                            className="flex flex-col items-center p-4 rounded-xl glass hover-lift group"
+                                            className="flex flex-col items-center p-3 rounded-xl glass hover-lift group"
                                             whileHover={{ scale: 1.05 }}
                                             transition={{ delay: index * 0.1 }}
                                         >
                                             <motion.div
-                                                className="mb-3 p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                                                className="mb-2 p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
                                                 animate={{ rotate: [0, 5, -5, 0] }}
                                                 transition={{ duration: 4, repeat: Infinity, delay: index * 0.5 }}
                                             >
-                                                <feature.icon className="w-6 h-6 text-primary" />
+                                                <feature.icon className="w-5 h-5 text-primary" />
                                             </motion.div>
-                                            <h3 className="font-semibold text-sm">{feature.title}</h3>
+                                            <h3 className="font-semibold text-xs">{feature.title}</h3>
                                             <p className="text-xs text-muted-foreground text-center">{feature.desc}</p>
                                         </motion.div>
                                     ))}
