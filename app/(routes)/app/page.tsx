@@ -26,6 +26,7 @@ const Page = () => {
     const [removedBgImageUrl, setRemovedBgImageUrl] = useState<string | null>(null);
     const [textSets, setTextSets] = useState<Array<any>>([]);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+    const [imageError, setImageError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -33,6 +34,12 @@ const Page = () => {
     useEffect(() => {
         const uploadedImage = localStorage.getItem('uploadedImage');
         if (uploadedImage) {
+            // Reset states
+            setImageError(null);
+            setIsImageSetupDone(false);
+            setRemovedBgImageUrl(null);
+            setTextSets([]);
+            
             setSelectedImage(uploadedImage);
             setupImage(uploadedImage);
             localStorage.removeItem('uploadedImage'); // Clean up
@@ -48,6 +55,12 @@ const Page = () => {
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
+            // Reset states
+            setImageError(null);
+            setIsImageSetupDone(false);
+            setRemovedBgImageUrl(null);
+            setTextSets([]);
+            
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
             await setupImage(imageUrl);
@@ -56,12 +69,15 @@ const Page = () => {
 
     const setupImage = async (imageUrl: string) => {
         try {
+            setImageError(null);
             const imageBlob = await removeBackground(imageUrl);
             const url = URL.createObjectURL(imageBlob);
             setRemovedBgImageUrl(url);
             setIsImageSetupDone(true);
         } catch (error) {
-            console.error(error);
+            console.error('Error processing image:', error);
+            setImageError('Failed to process image. Please try a different image.');
+            setIsImageSetupDone(false);
         }
     };
 
@@ -310,7 +326,27 @@ const Page = () => {
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    {isImageSetupDone ? (
+                                    {imageError ? (
+                                        <motion.div 
+                                            className='absolute inset-0 flex flex-col items-center justify-center glass rounded-lg'
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.4 }}
+                                        >
+                                            <motion.div className="text-center space-y-4 px-4">
+                                                <div className="text-red-500 text-lg font-semibold">Error Processing Image</div>
+                                                <p className="text-muted-foreground text-sm">{imageError}</p>
+                                                <Button 
+                                                    onClick={handleUploadImage}
+                                                    variant="outline"
+                                                    className="mt-4"
+                                                >
+                                                    <Upload className="w-4 h-4 mr-2" />
+                                                    Try Another Image
+                                                </Button>
+                                            </motion.div>
+                                        </motion.div>
+                                    ) : isImageSetupDone ? (
                                         <motion.div
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             animate={{ opacity: 1, scale: 1 }}
@@ -323,6 +359,10 @@ const Page = () => {
                                                 objectFit="contain" 
                                                 objectPosition="center"
                                                 className="rounded-lg"
+                                                onError={() => {
+                                                    setImageError('Failed to load image. Please try uploading again.');
+                                                    setIsImageSetupDone(false);
+                                                }}
                                             />
                                         </motion.div>
                                     ) : (
