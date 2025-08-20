@@ -24,9 +24,10 @@ export const usePerformance = () => {
       // First Input Delay
       const fidObserver = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries()) {
+          const fidEntry = entry as any; // Cast to any for browser compatibility
           setMetrics(prev => ({ 
             ...prev, 
-            fid: entry.processingStart - entry.startTime 
+            fid: fidEntry.processingStart - fidEntry.startTime 
           }));
         }
       });
@@ -36,8 +37,9 @@ export const usePerformance = () => {
       let clsValue = 0;
       const clsObserver = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries()) {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+          const clsEntry = entry as any; // Cast to any for browser compatibility
+          if (!clsEntry.hadRecentInput) {
+            clsValue += clsEntry.value;
           }
         }
         setMetrics(prev => ({ ...prev, cls: clsValue }));

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ModeToggle } from '@/components/mode-toggle';
 
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { Upload, Sparkles, Wand2, Zap, Type, ArrowLeft } from 'lucide-react';
+import { Upload, Sparkles, Wand2, Zap, Type, ArrowLeft, Plus } from 'lucide-react';
 
 import { removeBackground } from "@imgly/background-removal";
 import ProgressStages from '@/components/ui/progress-stages';
@@ -406,7 +406,7 @@ const Page = () => {
                                             animate={{ rotate: [0, 90, 0] }}
                                             transition={{ duration: 2, repeat: Infinity }}
                                         >
-                                            <PlusIcon className='w-4 h-4 text-primary'/>
+                                            <Plus className='w-4 h-4 text-primary'/>
                                         </motion.div>
                                         Add New Text
                                     </Button>

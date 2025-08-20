@@ -140,7 +140,7 @@ export function generateStructuredData(pageType: string = 'website', additionalD
 
   // Add page-specific structured data
   if (pageType === 'faq') {
-    baseStructuredData['@graph'].push(seoConfig.schema.faq);
+    baseStructuredData['@graph'].push(seoConfig.schema.faq as any);
   }
 
   if (pageType === 'article' || pageType === 'blog') {
@@ -161,7 +161,7 @@ export function generateStructuredData(pageType: string = 'website', additionalD
         '@id': additionalData.url || seoConfig.siteUrl
       }
     };
-    baseStructuredData['@graph'].push(articleSchema);
+    baseStructuredData['@graph'].push(articleSchema as any);
   }
 
   if (pageType === 'howto') {
@@ -172,7 +172,7 @@ export function generateStructuredData(pageType: string = 'website', additionalD
       image: additionalData.image || seoConfig.openGraph.image,
       step: additionalData.steps || []
     };
-    baseStructuredData['@graph'].push(howToSchema);
+    baseStructuredData['@graph'].push(howToSchema as any);
   }
 
   return JSON.stringify(baseStructuredData, null, 2);

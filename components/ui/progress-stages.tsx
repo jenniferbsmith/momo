@@ -167,12 +167,12 @@ const ProgressStages: React.FC<ProgressStagesProps> = ({ isVisible }) => {
                                 }}
                             />
                             
-                            <stages[currentStage - 1].icon 
-                                className="w-8 h-8 text-white relative z-10" 
-                                style={{
+                            {React.createElement(stages[currentStage - 1].icon, {
+                                className: "w-8 h-8 text-white relative z-10",
+                                style: {
                                     filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.8))'
-                                }}
-                            />
+                                }
+                            })}
                         </motion.div>
                         
                         <div className="flex-1 min-w-0">

@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import seoConfig from '@/lib/seo-config.json';
 
+export const dynamic = "force-static";
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
