@@ -16,6 +16,7 @@ import { PlusIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Upload, Sparkles, Wand2, Zap, Type } from 'lucide-react';
 
 import { removeBackground } from "@imgly/background-removal";
+import ProgressStages from '@/components/ui/progress-stages';
 
 import '@/app/fonts.css';
 
@@ -294,7 +295,7 @@ const Page = () => {
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
                                 <motion.div 
-                                    className="min-h-[600px] w-full max-w-[700px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
+                                    className="min-h-[582px] w-full max-w-[700px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
                                     whileHover={{ scale: 1.01 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 >
@@ -316,7 +317,7 @@ const Page = () => {
                                         </motion.div>
                                     ) : (
                                         <motion.div 
-                                            className='absolute inset-0 flex items-center justify-center glass rounded-lg'
+                                            className='absolute inset-0 flex flex-col items-center justify-center glass rounded-lg'
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             transition={{ duration: 0.4 }}
@@ -334,6 +335,8 @@ const Page = () => {
                                                 </motion.div>
                                                 <span className="text-gradient">Analyzing picture...</span>
                                             </motion.div>
+                                            
+                                            <ProgressStages isVisible={selectedImage !== null && !isImageSetupDone} />
                                         </motion.div>
                                 )}
                                     <AnimatePresence>
