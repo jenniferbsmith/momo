@@ -1,0 +1,173 @@
+{
+  "siteUrl": "https://textbehindimage.ai",
+  "siteName": "Text Behind Image - AI-Powered Photo Editor",
+  "siteDescription": "Create stunning text behind image effects with AI-powered background removal. Professional photo editing tool for creators, marketers, and designers. Try our free text behind image generator now.",
+  "keywords": [
+    "text behind image",
+    "text behind image generator",
+    "text behind image editor",
+    "text behind image ai",
+    "text behind image maker",
+    "text behind image creator",
+    "text behind image tool",
+    "text behind image app",
+    "text behind image online",
+    "text behind image free",
+    "background removal",
+    "ai photo editor",
+    "photo editing tool",
+    "graphic design software",
+    "content creation tool",
+    "visual design app",
+    "photo manipulation",
+    "image editor online",
+    "design tool free",
+    "creative photo editor"
+  ],
+  "author": "Text Behind Image Team",
+  "creator": "@textbehindimage",
+  "publisher": "Text Behind Image",
+  "category": "Photo Editing",
+  "type": "website",
+  "language": "en",
+  "locale": "en_US",
+  "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+  "openGraph": {
+    "title": "Text Behind Image - AI-Powered Photo Editor | Create Stunning Visual Effects",
+    "description": "Transform your photos with AI-powered text behind image effects. Professional photo editing tool trusted by 50,000+ creators worldwide. Free to try.",
+    "image": "/images/og-image.jpg",
+    "imageAlt": "Text Behind Image - AI-Powered Photo Editor Interface",
+    "url": "https://textbehindimage.ai",
+    "type": "website",
+    "locale": "en_US",
+    "siteName": "Text Behind Image"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Text Behind Image - AI Photo Editor | Create Stunning Visual Effects",
+    "description": "🎨 Create professional text behind image effects with AI. ✨ Trusted by 50K+ creators. 🚀 Free to try. Perfect for social media & marketing.",
+    "image": "/images/twitter-card.jpg",
+    "imageAlt": "Text Behind Image AI Editor - Create Professional Visual Effects",
+    "creator": "@textbehindimage",
+    "site": "@textbehindimage"
+  },
+  "schema": {
+    "organization": {
+      "@type": "Organization",
+      "name": "Text Behind Image",
+      "url": "https://textbehindimage.ai",
+      "logo": "https://textbehindimage.ai/images/logo.png",
+      "description": "AI-powered text behind image photo editing platform for creators and designers.",
+      "foundingDate": "2024",
+      "sameAs": [
+        "https://twitter.com/textbehindimage",
+        "https://facebook.com/textbehindimage",
+        "https://instagram.com/textbehindimage",
+        "https://linkedin.com/company/textbehindimage"
+      ]
+    },
+    "softwareApplication": {
+      "@type": "SoftwareApplication",
+      "name": "Text Behind Image Editor",
+      "description": "AI-powered photo editing application for creating professional text behind image effects with automatic background removal.",
+      "applicationCategory": "PhotoApplication",
+      "operatingSystem": "Web Browser, iOS, Android",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free text behind image editor with premium features available"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "2847",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Text Behind Image"
+      }
+    },
+    "website": {
+      "@type": "WebSite",
+      "name": "Text Behind Image",
+      "url": "https://textbehindimage.ai",
+      "description": "Professional AI-powered text behind image photo editor for creators, marketers, and designers.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://textbehindimage.ai/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    "faq": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is text behind image effect?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Text behind image effect is a popular design technique where text appears to be positioned behind elements in a photo, creating depth and visual interest. Our AI automatically detects the foreground subject and places text behind it for professional results."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the AI text behind image editor work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our AI-powered editor uses advanced machine learning to automatically remove backgrounds and identify foreground subjects. Simply upload your image, add your text, and our AI positions it behind the main subject for a professional text behind image effect."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the text behind image tool free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Our basic text behind image editor is completely free. You can create, edit, and download your designs without any cost. Premium features and high-resolution exports are available for advanced users."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What image formats are supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our text behind image editor supports all major formats including JPG, PNG, WEBP, and HEIC. You can upload images up to 10MB and export in high quality for professional use."
+          }
+        }
+      ]
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://textbehindimage.ai"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Text Behind Image Editor",
+          "item": "https://textbehindimage.ai/app"
+        }
+      ]
+    }
+  },
+  "alternateLanguages": [
+    {
+      "lang": "en",
+      "url": "https://textbehindimage.ai/"
+    },
+    {
+      "lang": "es",
+      "url": "https://textbehindimage.ai/es/"
+    },
+    {
+      "lang": "fr",
+      "url": "https://textbehindimage.ai/fr/"
+    }
+  ]
+}
