@@ -30,50 +30,39 @@ const HomePage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Preload critical images and gallery images
+  // Optimized image preloading - Only preload hero section images
   useEffect(() => {
-    const preloadImages = () => {
+    const preloadCriticalImages = () => {
+      // Only preload absolutely critical images for hero section
       const criticalImages = [
-        '/bear.png',
-        '/cold.png',
-        '/enjoy.png',
-        '/go.png',
-        '/goats.png',
-        '/life.png',
-        '/nature.png',
         '/og-image.jpg',
         '/open-source.png'
       ];
       
-      const galleryImageUrls = galleryImages.map(img => img.src);
-      const allImages = [...criticalImages, ...galleryImageUrls];
-      
       let loadedCount = 0;
-      allImages.forEach(src => {
+      criticalImages.forEach(src => {
         const img = new window.Image();
         img.onload = () => {
           loadedCount++;
           if (loadedCount === criticalImages.length) {
             setImagesPreloaded(true);
           }
-          if (loadedCount === allImages.length) {
-            setGalleryImagesLoaded(true);
-          }
         };
         img.onerror = () => {
-          loadedCount++; // Count failed loads too
+          loadedCount++;
           if (loadedCount === criticalImages.length) {
             setImagesPreloaded(true);
-          }
-          if (loadedCount === allImages.length) {
-            setGalleryImagesLoaded(true);
           }
         };
         img.src = src;
       });
     };
     
-    preloadImages();
+    // Delay preloading to not block initial render
+    setTimeout(preloadCriticalImages, 100);
+    
+    // Gallery images will load lazily when in viewport
+    setTimeout(() => setGalleryImagesLoaded(true), 1000);
   }, []);
 
   const scrollToTop = () => {
@@ -207,27 +196,25 @@ const HomePage = () => {
       {/* SEO Meta Tags - handled in layout.tsx */}
       
       <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 relative overflow-hidden">
-        {/* Reduced Background Elements for Performance */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(8)].map((_, i) => (
+        {/* Minimal Background Elements for Performance */}
+        <div className="absolute inset-0 pointer-events-none opacity-30">
+          {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 bg-primary/15 rounded-full"
+              className="absolute w-1 h-1 bg-primary/10 rounded-full"
               animate={{
-                x: [0, Math.random() * 200 - 100],
-                y: [0, Math.random() * 200 - 100],
-                opacity: [0, 0.4, 0],
-                scale: [0, 1.5, 0]
+                opacity: [0.1, 0.3, 0.1],
+                scale: [0.5, 1, 0.5]
               }}
               transition={{
-                duration: 8 + Math.random() * 3,
+                duration: 6,
                 repeat: Infinity,
-                delay: Math.random() * 3,
+                delay: i * 2,
                 ease: "easeInOut"
               }}
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`
+                left: `${20 + i * 30}%`,
+                top: `${20 + i * 25}%`
               }}
             />
           ))}

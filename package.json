@@ -5,7 +5,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "optimize:images": "node scripts/optimize-images.js",
+    "analyze": "cross-env ANALYZE=true next build",
+    "performance:audit": "npm run build && npm run start & sleep 5 && lighthouse http://localhost:3000 --only-categories=performance --chrome-flags='--headless'"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.6.0",
