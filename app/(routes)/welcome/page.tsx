@@ -97,19 +97,19 @@ const WelcomePage = () => {
       />
       
       <motion.div 
-        className='flex items-center justify-center flex-1 w-full p-4 md:p-8 text-center animated-bg min-h-[calc(100vh-120px)]'
+        className='flex items-center justify-center flex-1 w-full p-4 md:p-6 text-center animated-bg min-h-[calc(70vh-120px)]'
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
         <motion.div 
-          className="max-w-lg w-full space-y-4 md:space-y-6 professional-card p-6 md:p-8 rounded-3xl hover-lift mx-4"
+          className="max-w-4xl w-full space-y-3 md:space-y-4 professional-card p-4 md:p-6 rounded-3xl hover-lift mx-4"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <motion.div 
-            className="flex justify-center mb-8"
+            className="flex justify-center mb-4"
             initial={{ y: -30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -148,24 +148,24 @@ const WelcomePage = () => {
           </motion.div>
           
           <motion.div 
-            className="space-y-6"
+            className="space-y-4"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <h1 className="text-3xl md:text-5xl font-bold text-gradient leading-tight">
+            <h1 className="text-2xl md:text-4xl font-bold text-gradient leading-tight">
               Ready to Create
               <br />
               Amazing Designs?
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Upload your image and watch our AI transform it into a stunning text-behind-image masterpiece. 
               No design experience required!
             </p>
             
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
+              className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}

@@ -190,22 +190,22 @@ const HomePage = () => {
       {/* SEO Meta Tags - handled in layout.tsx */}
       
       <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 relative overflow-hidden">
-        {/* Animated Background Elements */}
+        {/* Reduced Background Elements for Performance */}
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(15)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 bg-primary/20 rounded-full"
+              className="absolute w-1 h-1 bg-primary/15 rounded-full"
               animate={{
-                x: [0, Math.random() * 300 - 150],
-                y: [0, Math.random() * 300 - 150],
-                opacity: [0, 0.6, 0],
-                scale: [0, 2, 0]
+                x: [0, Math.random() * 200 - 100],
+                y: [0, Math.random() * 200 - 100],
+                opacity: [0, 0.4, 0],
+                scale: [0, 1.5, 0]
               }}
               transition={{
-                duration: 6 + Math.random() * 4,
+                duration: 8 + Math.random() * 3,
                 repeat: Infinity,
-                delay: Math.random() * 5,
+                delay: Math.random() * 3,
                 ease: "easeInOut"
               }}
               style={{
@@ -246,10 +246,10 @@ const HomePage = () => {
             </motion.div>
             
             <nav className="hidden md:flex items-center gap-6">
-              <Link href="/welcome" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href="#why-choose-text-behind-image" className="text-muted-foreground hover:text-primary transition-colors">
                 Features
               </Link>
-              <Link href="#gallery" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href="/examples" className="text-muted-foreground hover:text-primary transition-colors">
                 Gallery
               </Link>
               <Link href="#faq" className="text-muted-foreground hover:text-primary transition-colors">

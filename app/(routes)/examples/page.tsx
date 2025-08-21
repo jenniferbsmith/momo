@@ -262,20 +262,20 @@ const ExamplesPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-primary/20 rounded-full"
+            className="absolute w-1 h-1 bg-primary/15 rounded-full"
             animate={{
-              x: [0, Math.random() * 400 - 200],
-              y: [0, Math.random() * 400 - 200],
-              opacity: [0, 0.6, 0],
-              scale: [0, 2, 0]
+              x: [0, Math.random() * 200 - 100],
+              y: [0, Math.random() * 200 - 100],
+              opacity: [0, 0.3, 0],
+              scale: [0, 1.2, 0]
             }}
             transition={{
-              duration: 8 + Math.random() * 4,
+              duration: 10 + Math.random() * 2,
               repeat: Infinity,
-              delay: Math.random() * 5,
+              delay: Math.random() * 3,
               ease: "easeInOut"
             }}
             style={{

@@ -98,9 +98,9 @@ const Page = () => {
         if (!ctx) return;
     
         // Get the preview container dimensions for scaling reference
-        const previewContainer = document.querySelector('.min-h-\[661px\]') as HTMLElement;
+        const previewContainer = document.querySelector('.min-h-\[740px\]') as HTMLElement;
         const containerWidth = previewContainer?.clientWidth || 700;
-        const containerHeight = previewContainer?.clientHeight || 661;
+        const containerHeight = previewContainer?.clientHeight || 740;
     
         const bgImg = new (window as any).Image();
         bgImg.crossOrigin = "anonymous";
@@ -160,27 +160,35 @@ const Page = () => {
                 // Apply 2D rotation first
                 ctx.rotate((textSet.rotation * Math.PI) / 180);
                 
-                // Apply 3D tilt effects as 2D approximations
+                // Apply enhanced 3D tilt effects as 2D approximations
                 const tiltXRad = (textSet.tiltX * Math.PI) / 180;
                 const tiltYRad = (textSet.tiltY * Math.PI) / 180;
                 
-                // Simulate 3D perspective with 2D transforms
-                // TiltX (rotateX) affects vertical scaling and skewing
-                // TiltY (rotateY) affects horizontal scaling and skewing
-                const perspectiveFactor = 1000; // perspective value
-                const scaleX = Math.cos(tiltYRad);
-                const scaleY = Math.cos(tiltXRad);
-                const skewX = Math.sin(tiltYRad) * 0.5; // Reduced skew for better appearance
-                const skewY = Math.sin(tiltXRad) * 0.5;
+                // Enhanced 3D perspective simulation
+                // TiltX (rotateX) - horizontal rotation affects vertical perspective
+                // TiltY (rotateY) - vertical rotation affects horizontal perspective
+                const perspectiveFactor = 800; // More pronounced perspective
                 
-                // Apply the 3D-like transformation matrix
+                // Calculate scaling and skewing for 3D effect
+                const scaleXFactor = Math.cos(tiltYRad); // Y tilt affects X scaling
+                const scaleYFactor = Math.cos(tiltXRad); // X tilt affects Y scaling
+                
+                // Enhanced skewing for better 3D appearance
+                const skewXFactor = Math.sin(tiltYRad) * 0.7; // More pronounced skew
+                const skewYFactor = Math.sin(tiltXRad) * 0.7;
+                
+                // Apply perspective scaling based on tilt
+                const perspectiveScaleX = 1 + (Math.sin(tiltYRad) * 0.3);
+                const perspectiveScaleY = 1 + (Math.sin(tiltXRad) * 0.3);
+                
+                // Apply the enhanced 3D-like transformation matrix
                 ctx.transform(
-                    scaleX,     // a: horizontal scaling
-                    skewY,      // b: horizontal skewing
-                    skewX,      // c: vertical skewing  
-                    scaleY,     // d: vertical scaling
-                    0,          // e: horizontal translation
-                    0           // f: vertical translation
+                    scaleXFactor * perspectiveScaleX,  // a: enhanced horizontal scaling
+                    skewYFactor,                       // b: enhanced horizontal skewing
+                    skewXFactor,                       // c: enhanced vertical skewing  
+                    scaleYFactor * perspectiveScaleY,  // d: enhanced vertical scaling
+                    0,                                 // e: horizontal translation
+                    0                                  // f: vertical translation
                 );
     
                 // Draw text with letter spacing
@@ -348,7 +356,7 @@ const Page = () => {
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
                                 <motion.div 
-                                    className="min-h-[661px] w-full max-w-[700px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
+                                    className="min-h-[740px] w-full max-w-[700px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
                                     whileHover={{ scale: 1.01 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 >
