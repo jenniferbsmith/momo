@@ -364,6 +364,7 @@ const Page = () => {
                                                     fontSize: `${textSet.fontSize}px`,
                                                     fontWeight: textSet.fontWeight,
                                                     fontFamily: textSet.fontFamily,
+                                                    opacity: textSet.opacity,
                                                     letterSpacing: `${textSet.letterSpacing}px`,
                                                     transformStyle: 'preserve-3d'
                                                 }}
