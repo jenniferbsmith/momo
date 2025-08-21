@@ -30,10 +30,10 @@ const HomePage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Preload critical images
+  // Preload critical images and gallery images
   useEffect(() => {
     const preloadImages = () => {
-      const imagesToPreload = [
+      const criticalImages = [
         '/bear.png',
         '/cold.png',
         '/enjoy.png',
@@ -45,13 +45,28 @@ const HomePage = () => {
         '/open-source.png'
       ];
       
+      const galleryImageUrls = galleryImages.map(img => img.src);
+      const allImages = [...criticalImages, ...galleryImageUrls];
+      
       let loadedCount = 0;
-      imagesToPreload.forEach(src => {
+      allImages.forEach(src => {
         const img = new window.Image();
         img.onload = () => {
           loadedCount++;
-          if (loadedCount === imagesToPreload.length) {
+          if (loadedCount === criticalImages.length) {
             setImagesPreloaded(true);
+          }
+          if (loadedCount === allImages.length) {
+            setGalleryImagesLoaded(true);
+          }
+        };
+        img.onerror = () => {
+          loadedCount++; // Count failed loads too
+          if (loadedCount === criticalImages.length) {
+            setImagesPreloaded(true);
+          }
+          if (loadedCount === allImages.length) {
+            setGalleryImagesLoaded(true);
           }
         };
         img.src = src;
@@ -76,6 +91,8 @@ const HomePage = () => {
     { src: '/images/gallery/peace.png', title: 'Peaceful Scene', category: 'Zen' },
     { src: '/images/gallery/timeless.png', title: 'Timeless Beauty', category: 'Classic' }
   ];
+
+  const [galleryImagesLoaded, setGalleryImagesLoaded] = useState(false);
 
   const features = [
     {
@@ -262,7 +279,7 @@ const HomePage = () => {
 
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button asChild className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-                <Link href="/welcome">
+                <Link href="/app">
                   Get Started <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
               </Button>
@@ -323,7 +340,7 @@ const HomePage = () => {
                   size="lg" 
                   className="text-lg px-8 py-4 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-xl hover:shadow-2xl transition-all duration-500"
                 >
-                  <Link href="/welcome">
+                  <Link href="/app">
                     <Play className="w-5 h-5 mr-2" />
                     Get Started Now
                     <ArrowRight className="w-5 h-5 ml-2" />
@@ -535,12 +552,24 @@ const HomePage = () => {
                   whileHover={{ scale: 1.05, y: -10 }}
                   className="group cursor-pointer"
                 >
-                  <div className="relative aspect-square rounded-2xl overflow-hidden shadow-xl">
+                  <div className="relative aspect-square rounded-2xl overflow-hidden shadow-xl bg-muted">
+                    {!galleryImagesLoaded && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+                        <motion.div
+                          className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full"
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        />
+                      </div>
+                    )}
                     <Image
                       src={image.src}
                       alt={image.title}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      className={`object-cover group-hover:scale-110 transition-all duration-500 ${
+                        galleryImagesLoaded ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      priority={index < 3} // Prioritize first 3 images
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -588,7 +617,7 @@ const HomePage = () => {
                   size="lg" 
                   className="text-xl px-12 py-6 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-2xl hover:shadow-3xl transition-all duration-500"
                 >
-                  <Link href="/welcome">
+                  <Link href="/app">
                     Start Creating Now
                     <ArrowRight className="w-6 h-6 ml-2" />
                   </Link>

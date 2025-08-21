@@ -97,110 +97,51 @@ const Page = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
     
-        // Get the preview container dimensions for scaling reference
-        const previewContainer = document.querySelector('.min-h-\[740px\]') as HTMLElement;
-        const containerWidth = previewContainer?.clientWidth || 700;
-        const containerHeight = previewContainer?.clientHeight || 740;
-    
         const bgImg = new (window as any).Image();
         bgImg.crossOrigin = "anonymous";
         bgImg.onload = () => {
-            // Calculate the display dimensions in the preview container
-            const imageAspectRatio = bgImg.width / bgImg.height;
-            const containerAspectRatio = containerWidth / containerHeight;
-            
-            let displayWidth, displayHeight;
-            if (imageAspectRatio > containerAspectRatio) {
-                // Image is wider - fit to container width
-                displayWidth = containerWidth;
-                displayHeight = containerWidth / imageAspectRatio;
-            } else {
-                // Image is taller - fit to container height
-                displayHeight = containerHeight;
-                displayWidth = containerHeight * imageAspectRatio;
-            }
-            
-            // Set canvas to match the display dimensions exactly
-            canvas.width = displayWidth;
-            canvas.height = displayHeight;
-            
-            // Calculate scaling factors
-            const scaleX = displayWidth / bgImg.width;
-            const scaleY = displayHeight / bgImg.height;
-            const scale = Math.min(scaleX, scaleY);
-            
-            // Center the image on canvas
-            const scaledWidth = bgImg.width * scale;
-            const scaledHeight = bgImg.height * scale;
-            const offsetX = (displayWidth - scaledWidth) / 2;
-            const offsetY = (displayHeight - scaledHeight) / 2;
-            
-            // Clear canvas and draw background image
-            ctx.clearRect(0, 0, displayWidth, displayHeight);
-            ctx.drawImage(bgImg, offsetX, offsetY, scaledWidth, scaledHeight);
-            
-            // Draw text with proper scaling
+            canvas.width = bgImg.width;
+            canvas.height = bgImg.height;
+    
+            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+    
             textSets.forEach(textSet => {
                 ctx.save();
                 
-                // Calculate text size based on preview scaling
-                const fontSize = textSet.fontSize * scale * 0.35; // Adjusted scaling factor
-                ctx.font = `${textSet.fontWeight} ${fontSize}px ${textSet.fontFamily}`;
+                ctx.font = `${textSet.fontWeight} ${textSet.fontSize * 3}px ${textSet.fontFamily}`;
                 ctx.fillStyle = textSet.color;
                 ctx.globalAlpha = textSet.opacity;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                
-                // Calculate position based on display dimensions
-                const x = displayWidth * (textSet.left + 50) / 100;
-                const y = displayHeight * (50 - textSet.top) / 100;
+                ctx.letterSpacing = `${textSet.letterSpacing}px`;
+    
+                const x = canvas.width * (textSet.left + 50) / 100;
+                const y = canvas.height * (50 - textSet.top) / 100;
     
                 ctx.translate(x, y);
                 
-                // Apply 2D rotation first
-                ctx.rotate((textSet.rotation * Math.PI) / 180);
-                
-                // Apply enhanced 3D tilt effects as 2D approximations
-                const tiltXRad = (textSet.tiltX * Math.PI) / 180;
-                const tiltYRad = (textSet.tiltY * Math.PI) / 180;
-                
-                // Enhanced 3D perspective simulation
-                // TiltX (rotateX) - horizontal rotation affects vertical perspective
-                // TiltY (rotateY) - vertical rotation affects horizontal perspective
-                const perspectiveFactor = 800; // More pronounced perspective
-                
-                // Calculate scaling and skewing for 3D effect
-                const scaleXFactor = Math.cos(tiltYRad); // Y tilt affects X scaling
-                const scaleYFactor = Math.cos(tiltXRad); // X tilt affects Y scaling
-                
-                // Enhanced skewing for better 3D appearance
-                const skewXFactor = Math.sin(tiltYRad) * 0.7; // More pronounced skew
-                const skewYFactor = Math.sin(tiltXRad) * 0.7;
-                
-                // Apply perspective scaling based on tilt
-                const perspectiveScaleX = 1 + (Math.sin(tiltYRad) * 0.3);
-                const perspectiveScaleY = 1 + (Math.sin(tiltXRad) * 0.3);
-                
-                // Apply the enhanced 3D-like transformation matrix
+                const tiltXRad = (-textSet.tiltX * Math.PI) / 180;
+                const tiltYRad = (-textSet.tiltY * Math.PI) / 180;
+    
                 ctx.transform(
-                    scaleXFactor * perspectiveScaleX,  // a: enhanced horizontal scaling
-                    skewYFactor,                       // b: enhanced horizontal skewing
-                    skewXFactor,                       // c: enhanced vertical skewing  
-                    scaleYFactor * perspectiveScaleY,  // d: enhanced vertical scaling
-                    0,                                 // e: horizontal translation
-                    0                                  // f: vertical translation
+                    Math.cos(tiltYRad),
+                    Math.sin(0),
+                    -Math.sin(0),
+                    Math.cos(tiltXRad),
+                    0,
+                    0
                 );
     
-                // Draw text with letter spacing
+                ctx.rotate((textSet.rotation * Math.PI) / 180);
+    
                 if (textSet.letterSpacing === 0) {
                     ctx.fillText(textSet.text, 0, 0);
                 } else {
                     const chars = textSet.text.split('');
-                    const scaledLetterSpacing = textSet.letterSpacing * scale * 0.35;
                     let currentX = 0;
                     const totalWidth = chars.reduce((width, char, i) => {
                         const charWidth = ctx.measureText(char).width;
-                        return width + charWidth + (i < chars.length - 1 ? scaledLetterSpacing : 0);
+                        return width + charWidth + (i < chars.length - 1 ? textSet.letterSpacing : 0);
                     }, 0);
                     
                     currentX = -totalWidth / 2;
@@ -208,18 +149,17 @@ const Page = () => {
                     chars.forEach((char, i) => {
                         const charWidth = ctx.measureText(char).width;
                         ctx.fillText(char, currentX + charWidth / 2, 0);
-                        currentX += charWidth + scaledLetterSpacing;
+                        currentX += charWidth + textSet.letterSpacing;
                     });
                 }
                 ctx.restore();
             });
     
-            // Draw the removed background image overlay
             if (removedBgImageUrl) {
                 const removedBgImg = new (window as any).Image();
                 removedBgImg.crossOrigin = "anonymous";
                 removedBgImg.onload = () => {
-                    ctx.drawImage(removedBgImg, offsetX, offsetY, scaledWidth, scaledHeight);
+                    ctx.drawImage(removedBgImg, 0, 0, canvas.width, canvas.height);
                     triggerDownload();
                 };
                 removedBgImg.src = removedBgImageUrl;
@@ -356,7 +296,7 @@ const Page = () => {
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
                                 <motion.div 
-                                    className="min-h-[740px] w-full max-w-[700px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
+                                    className="min-h-[662px] w-full max-w-[622px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
                                     whileHover={{ scale: 1.01 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 >
@@ -511,13 +451,13 @@ const Page = () => {
                             transition={{ duration: 0.8 }}
                         >
                         <motion.div 
-                            className="max-w-xl space-y-4 professional-card p-6 md:p-8 rounded-3xl hover-lift"
+                            className="max-w-4xl w-full space-y-3 md:space-y-4 professional-card p-4 md:p-6 rounded-3xl hover-lift mx-4"
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
                         >
                             <motion.div 
-                                className="flex justify-center mb-6"
+                                className="flex justify-center mb-4"
                                 initial={{ y: -30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
@@ -533,11 +473,11 @@ const Page = () => {
                                         scale: { duration: 2, repeat: Infinity }
                                     }}
                                 >
-                                    <div className="w-16 h-16 bg-gradient-to-br from-primary via-accent to-primary rounded-2xl flex items-center justify-center glow animate-pulse-glow">
-                                        <Wand2 className="w-8 h-8 text-white" />
+                                    <div className="w-20 h-20 bg-gradient-to-br from-primary via-accent to-primary rounded-3xl flex items-center justify-center glow animate-pulse-glow shadow-2xl">
+                                        <Wand2 className="w-10 h-10 text-white" />
                                     </div>
                                     <motion.div
-                                        className="absolute -top-2 -right-2 w-4 h-4 bg-accent rounded-full"
+                                        className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full"
                                         animate={{ 
                                             scale: [0, 1, 0],
                                             opacity: [0, 1, 0]
@@ -545,7 +485,7 @@ const Page = () => {
                                         transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
                                     />
                                     <motion.div
-                                        className="absolute -bottom-1 -left-1 w-3 h-3 bg-primary rounded-full"
+                                        className="absolute -bottom-1 -left-1 w-4 h-4 bg-primary rounded-full"
                                         animate={{ 
                                             scale: [0, 1, 0],
                                             opacity: [0, 1, 0]
@@ -562,14 +502,14 @@ const Page = () => {
                                 transition={{ duration: 0.8, delay: 0.6 }}
                             >
                                 <h1 className="text-2xl md:text-4xl font-bold text-gradient leading-tight">
-                                    Create Stunning
+                                    Ready to Create
                                     <br />
-                                    Text Behind Images
+                                    Amazing Designs?
                                 </h1>
                                 
-                                <p className="text-base md:text-lg text-muted-foreground max-w-md mx-auto leading-relaxed">
-                                    Professional AI-powered editor for creating breathtaking text-behind-image designs. 
-                                    Upload your image and let the magic begin.
+                                <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                                    Upload your image and watch our AI transform it into a stunning text-behind-image masterpiece. 
+                                    No design experience required!
                                 </p>
                                 
                                 <motion.div 
@@ -585,18 +525,18 @@ const Page = () => {
                                     ].map((feature, index) => (
                                         <motion.div 
                                             key={feature.title}
-                                            className="flex flex-col items-center p-3 rounded-xl glass hover-lift group"
+                                            className="flex flex-col items-center p-4 rounded-xl glass hover-lift group"
                                             whileHover={{ scale: 1.05 }}
                                             transition={{ delay: index * 0.1 }}
                                         >
                                             <motion.div
-                                                className="mb-2 p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                                                className="mb-3 p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
                                                 animate={{ rotate: [0, 5, -5, 0] }}
                                                 transition={{ duration: 4, repeat: Infinity, delay: index * 0.5 }}
                                             >
-                                                <feature.icon className="w-5 h-5 text-primary" />
+                                                <feature.icon className="w-6 h-6 text-primary" />
                                             </motion.div>
-                                            <h3 className="font-semibold text-xs">{feature.title}</h3>
+                                            <h3 className="font-semibold text-sm mb-1">{feature.title}</h3>
                                             <p className="text-xs text-muted-foreground text-center">{feature.desc}</p>
                                         </motion.div>
                                     ))}
@@ -609,23 +549,33 @@ const Page = () => {
                                 transition={{ duration: 0.8, delay: 1 }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
+                                className="pt-4"
                             >
                                 <Button 
                                     onClick={handleUploadImage} 
                                     size="lg" 
-                                    className="text-lg px-8 py-4 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-xl hover:shadow-2xl transition-all duration-500 glow animate-pulse-glow group"
+                                    className="text-xl px-12 py-6 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-xl hover:shadow-2xl transition-all duration-500 glow animate-pulse-glow group w-full md:w-auto"
                                 >
                                     <motion.div
                                         className="flex items-center gap-3"
                                         animate={{ x: [0, 3, 0] }}
                                         transition={{ duration: 2, repeat: Infinity }}
                                     >
-                                        <Upload className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                                        Upload an Image
-                                        <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                        <Upload className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                                        Upload Your Image
+                                        <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
                                     </motion.div>
                                 </Button>
                             </motion.div>
+                            
+                            <motion.p 
+                                className="text-sm text-muted-foreground"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 1.2 }}
+                            >
+                                Supports JPG, PNG, WEBP • Max 10MB • AI-powered processing
+                            </motion.p>
                             </motion.div>
                         </motion.div>
                     )}

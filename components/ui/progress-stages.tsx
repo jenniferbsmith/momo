@@ -10,25 +10,67 @@ interface ProgressStagesProps {
 
 const stages = [
   {
-    id: 'analyzing',
-    title: 'Analyzing Image',
-    description: 'AI is examining your photo',
+    id: 'initializing',
+    title: 'Initializing AI Engine',
+    description: 'Starting up advanced processing systems',
     icon: Eye,
-    duration: 2000
+    duration: 6000
+  },
+  {
+    id: 'analyzing',
+    title: 'Analyzing Image Structure',
+    description: 'AI is examining your photo composition',
+    icon: Wand2,
+    duration: 6000
+  },
+  {
+    id: 'detecting',
+    title: 'Detecting Objects',
+    description: 'Identifying subjects and background elements',
+    icon: Sparkles,
+    duration: 6000
+  },
+  {
+    id: 'separating',
+    title: 'Separating Layers',
+    description: 'Creating depth maps for perfect text placement',
+    icon: CheckCircle,
+    duration: 6000
   },
   {
     id: 'processing',
     title: 'Processing Background',
-    description: 'Removing background with precision',
+    description: 'Removing background with pixel-perfect precision',
+    icon: Loader2,
+    duration: 6000
+  },
+  {
+    id: 'optimizing',
+    title: 'Optimizing Quality',
+    description: 'Enhancing image quality and sharpness',
+    icon: Eye,
+    duration: 6000
+  },
+  {
+    id: 'preparing',
+    title: 'Preparing Canvas',
+    description: 'Setting up your creative workspace',
     icon: Wand2,
-    duration: 3000
+    duration: 6000
   },
   {
     id: 'finalizing',
     title: 'Finalizing Magic',
-    description: 'Preparing your masterpiece',
+    description: 'Your masterpiece is almost ready',
     icon: Sparkles,
-    duration: 1500
+    duration: 6000
+  },
+  {
+    id: 'complete',
+    title: 'Ready to Create!',
+    description: 'Everything is set up perfectly',
+    icon: CheckCircle,
+    duration: 2000
   }
 ];
 
