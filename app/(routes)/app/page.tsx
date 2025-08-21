@@ -216,7 +216,7 @@ const Page = () => {
                         <div className="flex flex-col items-center md:items-start justify-start w-full md:w-1/2 gap-4">
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
-                            <div className="min-h-[300px] w-full max-w-[500px] p-2 md:p-4 border border-border rounded-lg relative overflow-hidden">
+                            <div className="min-h-[573px] w-full max-w-[614px] p-2 md:p-4 border border-border rounded-lg relative overflow-hidden">
                                 {isImageSetupDone ? (
                                     <Image
                                         src={selectedImage} 
