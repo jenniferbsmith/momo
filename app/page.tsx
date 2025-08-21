@@ -19,6 +19,7 @@ import '@/app/fonts.css';
 const HomePage = () => {
   const [scrollY, setScrollY] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [imagesPreloaded, setImagesPreloaded] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +28,37 @@ const HomePage = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Preload critical images
+  useEffect(() => {
+    const preloadImages = () => {
+      const imagesToPreload = [
+        '/bear.png',
+        '/cold.png',
+        '/enjoy.png',
+        '/go.png',
+        '/goats.png',
+        '/life.png',
+        '/nature.png',
+        '/og-image.jpg',
+        '/open-source.png'
+      ];
+      
+      let loadedCount = 0;
+      imagesToPreload.forEach(src => {
+        const img = new window.Image();
+        img.onload = () => {
+          loadedCount++;
+          if (loadedCount === imagesToPreload.length) {
+            setImagesPreloaded(true);
+          }
+        };
+        img.src = src;
+      });
+    };
+    
+    preloadImages();
   }, []);
 
   const scrollToTop = () => {
@@ -301,13 +333,15 @@ const HomePage = () => {
               
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button 
+                  asChild
                   variant="outline" 
                   size="lg"
                   className="text-lg px-8 py-4 border-primary/50 hover:bg-primary/10"
-                  onClick={() => document.getElementById('showcase')?.scrollIntoView({ behavior: 'smooth' })}
                 >
-                  <Eye className="w-5 h-5 mr-2" />
-                  View Examples
+                  <Link href="/examples">
+                    <Eye className="w-5 h-5 mr-2" />
+                    View Examples
+                  </Link>
                 </Button>
               </motion.div>
             </motion.div>
@@ -371,7 +405,7 @@ const HomePage = () => {
         </section>
 
         {/* Features Grid */}
-        <section className="py-20">
+        <section id="why-choose-text-behind-image" className="py-20">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -587,15 +621,15 @@ const HomePage = () => {
               <div>
                 <h4 className="font-semibold mb-4">Product</h4>
                 <div className="space-y-2">
-                  <Link href="/welcome" className="block text-muted-foreground hover:text-primary transition-colors">
+                  <a href="#why-choose-text-behind-image" className="block text-muted-foreground hover:text-primary transition-colors">
                     Features
-                  </Link>
-                  <Link href="#gallery" className="block text-muted-foreground hover:text-primary transition-colors">
+                  </a>
+                  <Link href="/examples" className="block text-muted-foreground hover:text-primary transition-colors">
                     Gallery
                   </Link>
-                  <Link href="#faq" className="block text-muted-foreground hover:text-primary transition-colors">
+                  <a href="#FAQs" className="block text-muted-foreground hover:text-primary transition-colors">
                     FAQ
-                  </Link>
+                  </a>
                 </div>
               </div>
               

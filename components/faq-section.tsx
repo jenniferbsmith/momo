@@ -102,24 +102,23 @@ const FAQSection = () => {
     : faqData.filter(faq => faq.category === selectedCategory);
 
   return (
-    <section className="py-20 md:py-32 relative overflow-hidden bg-gradient-to-br from-primary/5 via-accent/5 to-primary/10">
-      {/* Animated Background Elements */}
+    <section id="FAQs" className="py-12 md:py-16 relative overflow-hidden bg-gradient-to-br from-primary/3 via-accent/3 to-primary/5">
+      {/* Simplified Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute"
             animate={{
-              x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50],
-              opacity: [0, 0.1, 0],
-              scale: [0, 1, 0],
-              rotate: [0, 360]
+              x: [0, Math.random() * 50 - 25],
+              y: [0, Math.random() * 50 - 25],
+              opacity: [0, 0.05, 0],
+              scale: [0, 0.8, 0]
             }}
             transition={{
-              duration: 12 + Math.random() * 8,
+              duration: 15 + Math.random() * 10,
               repeat: Infinity,
-              delay: Math.random() * 5,
+              delay: Math.random() * 8,
               ease: "easeInOut"
             }}
             style={{
@@ -127,7 +126,7 @@ const FAQSection = () => {
               top: `${Math.random() * 100}%`
             }}
           >
-            <Sparkles className="w-4 h-4 text-primary/20" />
+            <Sparkles className="w-3 h-3 text-primary/15" />
           </motion.div>
         ))}
       </div>
@@ -168,10 +167,10 @@ const FAQSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-12"
         >
           <motion.div
-            className="w-20 h-20 mx-auto mb-8 bg-gradient-to-br from-primary via-accent to-primary rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden"
+            className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary via-accent to-primary rounded-2xl flex items-center justify-center shadow-xl relative overflow-hidden"
             animate={{ 
               rotate: [0, 360],
               boxShadow: [
@@ -199,11 +198,11 @@ const FAQSection = () => {
                 ease: "easeInOut"
               }}
             />
-            <Sparkles className="w-10 h-10 text-white relative z-10" />
+            <Sparkles className="w-8 h-8 text-white relative z-10" />
           </motion.div>
           
           <motion.h2 
-            className="text-5xl md:text-7xl font-bold mb-8 leading-tight"
+            className="text-3xl md:text-5xl font-bold mb-6 leading-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -213,13 +212,13 @@ const FAQSection = () => {
               Text Behind Image
             </span>
             <br />
-            <span className="text-3xl md:text-4xl text-muted-foreground font-normal">
+            <span className="text-xl md:text-2xl text-muted-foreground font-normal">
               Frequently Asked Questions
             </span>
           </motion.h2>
 
           <motion.p 
-            className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed"
+            className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -236,14 +235,14 @@ const FAQSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mb-16"
+          className="mb-12"
         >
           <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-6xl mx-auto">
             {categories.map((category, index) => (
               <motion.button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`flex items-center gap-2 px-4 md:px-6 py-3 md:py-4 rounded-2xl font-semibold text-sm md:text-base transition-all duration-500 relative overflow-hidden group ${
+                className={`flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition-all duration-300 relative overflow-hidden group ${
                   selectedCategory === category.id
                     ? 'bg-gradient-to-r from-primary to-accent text-white shadow-xl scale-105'
                     : 'bg-background/50 backdrop-blur-sm border border-border/20 hover:border-primary/30 hover:bg-primary/5'
@@ -273,7 +272,7 @@ const FAQSection = () => {
                   animate={{ rotate: selectedCategory === category.id ? [0, 360] : 0 }}
                   transition={{ duration: 2, repeat: selectedCategory === category.id ? Infinity : 0 }}
                 >
-                  <category.icon className="w-4 h-4 md:w-5 md:h-5 relative z-10" />
+                      <category.icon className="w-3 h-3 md:w-4 md:h-4 relative z-10" />
                 </motion.div>
                 <span className="relative z-10">{category.label}</span>
               </motion.button>
@@ -317,12 +316,12 @@ const FAQSection = () => {
 
                   <motion.button
                     onClick={() => toggleItem(faq.id)}
-                    className="w-full p-8 md:p-10 text-left flex items-center gap-6 relative z-10"
+                    className="w-full p-6 md:p-8 text-left flex items-center gap-4 relative z-10"
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.99 }}
                   >
                     <motion.div
-                      className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center shadow-xl relative overflow-hidden flex-shrink-0"
+                      className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden flex-shrink-0"
                       animate={{ 
                         rotate: openItems.has(faq.id) ? [0, 360] : 0,
                         boxShadow: [
@@ -349,11 +348,11 @@ const FAQSection = () => {
                           delay: index * 0.3
                         }}
                       />
-                      <faq.icon className="w-8 h-8 text-white relative z-10" />
+                      <faq.icon className="w-6 h-6 text-white relative z-10" />
                     </motion.div>
                     
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-2xl md:text-3xl font-bold text-gradient mb-2 leading-tight">
+                      <h3 className="text-lg md:text-xl font-bold text-gradient mb-1 leading-tight">
                         {faq.question}
                       </h3>
                     </div>
@@ -363,7 +362,7 @@ const FAQSection = () => {
                       transition={{ duration: 0.3 }}
                       className="flex-shrink-0"
                     >
-                      <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+                      <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                     </motion.div>
                   </motion.button>
 
@@ -377,7 +376,7 @@ const FAQSection = () => {
                         className="overflow-hidden relative z-10"
                       >
                         <motion.div 
-                          className="px-8 md:px-10 pb-8 md:pb-10 ml-22"
+                          className="px-6 md:px-8 pb-6 md:pb-8 ml-16"
                           initial={{ y: -20, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
                           exit={{ y: -20, opacity: 0 }}
@@ -387,7 +386,7 @@ const FAQSection = () => {
                             {faq.answer.split('\n').map((paragraph, pIndex) => (
                               <motion.p 
                                 key={pIndex}
-                                className="mb-4 text-base md:text-lg leading-relaxed"
+                                className="mb-3 text-sm md:text-base leading-relaxed"
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.4, delay: pIndex * 0.1 }}
@@ -411,9 +410,9 @@ const FAQSection = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-center mt-20"
+          className="text-center mt-16"
         >
-          <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl p-12 md:p-16 border border-border/20 relative overflow-hidden max-w-4xl mx-auto">
+          <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl p-8 md:p-12 border border-border/20 relative overflow-hidden max-w-3xl mx-auto">
             {/* Animated background pattern */}
             <motion.div
               className="absolute inset-0 opacity-10"
@@ -429,7 +428,7 @@ const FAQSection = () => {
             />
 
             <motion.div
-              className="w-16 h-16 mx-auto mb-8 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center relative"
+              className="w-12 h-12 mx-auto mb-6 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center relative"
               animate={{ 
                 rotate: [0, 360],
                 scale: [1, 1.1, 1]
@@ -439,18 +438,18 @@ const FAQSection = () => {
                 scale: { duration: 3, repeat: Infinity }
               }}
             >
-              <Wand2 className="w-8 h-8 text-white" />
+              <Wand2 className="w-6 h-6 text-white" />
             </motion.div>
             
-            <h3 className="text-4xl md:text-5xl font-bold text-gradient mb-6">
+            <h3 className="text-2xl md:text-3xl font-bold text-gradient mb-4">
               Ready to Create Amazing Text Behind Image Effects?
             </h3>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
               Join thousands of creators using our AI-powered text behind image editor to create stunning visual content that captivates audiences and drives results.
             </p>
             
             <motion.button 
-              className="bg-gradient-to-r from-primary to-accent text-white px-12 py-6 rounded-2xl text-xl font-semibold shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group"
+              className="bg-gradient-to-r from-primary to-accent text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
               whileHover={{ scale: 1.05, y: -3 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => window.location.href = '/welcome'}
@@ -466,7 +465,7 @@ const FAQSection = () => {
                 }}
               />
               <span className="relative z-10 flex items-center gap-3">
-                <Sparkles className="w-6 h-6" />
+                <Sparkles className="w-5 h-5" />
                 Start Creating Now - It's Free!
               </span>
             </motion.button>

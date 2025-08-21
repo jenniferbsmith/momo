@@ -97,13 +97,13 @@ const WelcomePage = () => {
       />
       
       <motion.div 
-        className='flex items-center justify-center flex-1 w-full p-8 text-center animated-bg'
+        className='flex items-center justify-center flex-1 w-full p-4 md:p-8 text-center animated-bg min-h-[calc(100vh-120px)]'
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
         <motion.div 
-          className="max-w-xl space-y-6 professional-card p-8 md:p-12 rounded-3xl hover-lift"
+          className="max-w-lg w-full space-y-4 md:space-y-6 professional-card p-6 md:p-8 rounded-3xl hover-lift mx-4"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}

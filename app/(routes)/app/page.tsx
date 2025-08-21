@@ -97,51 +97,102 @@ const Page = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
     
+        // Get the preview container dimensions for scaling reference
+        const previewContainer = document.querySelector('.min-h-\[661px\]') as HTMLElement;
+        const containerWidth = previewContainer?.clientWidth || 700;
+        const containerHeight = previewContainer?.clientHeight || 661;
+    
         const bgImg = new (window as any).Image();
         bgImg.crossOrigin = "anonymous";
         bgImg.onload = () => {
-            canvas.width = bgImg.width;
-            canvas.height = bgImg.height;
-    
-            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-    
+            // Calculate the display dimensions in the preview container
+            const imageAspectRatio = bgImg.width / bgImg.height;
+            const containerAspectRatio = containerWidth / containerHeight;
+            
+            let displayWidth, displayHeight;
+            if (imageAspectRatio > containerAspectRatio) {
+                // Image is wider - fit to container width
+                displayWidth = containerWidth;
+                displayHeight = containerWidth / imageAspectRatio;
+            } else {
+                // Image is taller - fit to container height
+                displayHeight = containerHeight;
+                displayWidth = containerHeight * imageAspectRatio;
+            }
+            
+            // Set canvas to match the display dimensions exactly
+            canvas.width = displayWidth;
+            canvas.height = displayHeight;
+            
+            // Calculate scaling factors
+            const scaleX = displayWidth / bgImg.width;
+            const scaleY = displayHeight / bgImg.height;
+            const scale = Math.min(scaleX, scaleY);
+            
+            // Center the image on canvas
+            const scaledWidth = bgImg.width * scale;
+            const scaledHeight = bgImg.height * scale;
+            const offsetX = (displayWidth - scaledWidth) / 2;
+            const offsetY = (displayHeight - scaledHeight) / 2;
+            
+            // Clear canvas and draw background image
+            ctx.clearRect(0, 0, displayWidth, displayHeight);
+            ctx.drawImage(bgImg, offsetX, offsetY, scaledWidth, scaledHeight);
+            
+            // Draw text with proper scaling
             textSets.forEach(textSet => {
                 ctx.save();
                 
-                ctx.font = `${textSet.fontWeight} ${textSet.fontSize * 3}px ${textSet.fontFamily}`;
+                // Calculate text size based on preview scaling
+                const fontSize = textSet.fontSize * scale * 0.35; // Adjusted scaling factor
+                ctx.font = `${textSet.fontWeight} ${fontSize}px ${textSet.fontFamily}`;
                 ctx.fillStyle = textSet.color;
                 ctx.globalAlpha = textSet.opacity;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.letterSpacing = `${textSet.letterSpacing}px`;
-    
-                const x = canvas.width * (textSet.left + 50) / 100;
-                const y = canvas.height * (50 - textSet.top) / 100;
+                
+                // Calculate position based on display dimensions
+                const x = displayWidth * (textSet.left + 50) / 100;
+                const y = displayHeight * (50 - textSet.top) / 100;
     
                 ctx.translate(x, y);
                 
-                const tiltXRad = (-textSet.tiltX * Math.PI) / 180;
-                const tiltYRad = (-textSet.tiltY * Math.PI) / 180;
-    
+                // Apply 2D rotation first
+                ctx.rotate((textSet.rotation * Math.PI) / 180);
+                
+                // Apply 3D tilt effects as 2D approximations
+                const tiltXRad = (textSet.tiltX * Math.PI) / 180;
+                const tiltYRad = (textSet.tiltY * Math.PI) / 180;
+                
+                // Simulate 3D perspective with 2D transforms
+                // TiltX (rotateX) affects vertical scaling and skewing
+                // TiltY (rotateY) affects horizontal scaling and skewing
+                const perspectiveFactor = 1000; // perspective value
+                const scaleX = Math.cos(tiltYRad);
+                const scaleY = Math.cos(tiltXRad);
+                const skewX = Math.sin(tiltYRad) * 0.5; // Reduced skew for better appearance
+                const skewY = Math.sin(tiltXRad) * 0.5;
+                
+                // Apply the 3D-like transformation matrix
                 ctx.transform(
-                    Math.cos(tiltYRad),
-                    Math.sin(0),
-                    -Math.sin(0),
-                    Math.cos(tiltXRad),
-                    0,
-                    0
+                    scaleX,     // a: horizontal scaling
+                    skewY,      // b: horizontal skewing
+                    skewX,      // c: vertical skewing  
+                    scaleY,     // d: vertical scaling
+                    0,          // e: horizontal translation
+                    0           // f: vertical translation
                 );
     
-                ctx.rotate((textSet.rotation * Math.PI) / 180);
-    
+                // Draw text with letter spacing
                 if (textSet.letterSpacing === 0) {
                     ctx.fillText(textSet.text, 0, 0);
                 } else {
                     const chars = textSet.text.split('');
+                    const scaledLetterSpacing = textSet.letterSpacing * scale * 0.35;
                     let currentX = 0;
                     const totalWidth = chars.reduce((width, char, i) => {
                         const charWidth = ctx.measureText(char).width;
-                        return width + charWidth + (i < chars.length - 1 ? textSet.letterSpacing : 0);
+                        return width + charWidth + (i < chars.length - 1 ? scaledLetterSpacing : 0);
                     }, 0);
                     
                     currentX = -totalWidth / 2;
@@ -149,17 +200,18 @@ const Page = () => {
                     chars.forEach((char, i) => {
                         const charWidth = ctx.measureText(char).width;
                         ctx.fillText(char, currentX + charWidth / 2, 0);
-                        currentX += charWidth + textSet.letterSpacing;
+                        currentX += charWidth + scaledLetterSpacing;
                     });
                 }
                 ctx.restore();
             });
     
+            // Draw the removed background image overlay
             if (removedBgImageUrl) {
                 const removedBgImg = new (window as any).Image();
                 removedBgImg.crossOrigin = "anonymous";
                 removedBgImg.onload = () => {
-                    ctx.drawImage(removedBgImg, 0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(removedBgImg, offsetX, offsetY, scaledWidth, scaledHeight);
                     triggerDownload();
                 };
                 removedBgImg.src = removedBgImageUrl;
@@ -170,11 +222,13 @@ const Page = () => {
         bgImg.src = selectedImage || '';
     
         function triggerDownload() {
-            const dataUrl = canvas.toDataURL('image/png');
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
             const link = document.createElement('a');
-            link.download = 'text-behind-image.png';
+            link.download = `text-behind-image-${Date.now()}.png`;
             link.href = dataUrl;
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
         }
     };
     
@@ -221,7 +275,7 @@ const Page = () => {
                             ref={fileInputRef}
                             style={{ display: 'none' }}
                             onChange={handleFileChange}
-                            accept=".jpg, .jpeg, .png"
+                            accept=".jpg, .jpeg, .png, .webp"
                         />
                         
                         <motion.div
@@ -294,7 +348,7 @@ const Page = () => {
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
                                 <motion.div 
-                                    className="min-h-[582px] w-full max-w-[700px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
+                                    className="min-h-[661px] w-full max-w-[700px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
                                     whileHover={{ scale: 1.01 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 >
@@ -418,7 +472,7 @@ const Page = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.8, delay: 0.6 }}
                                 >
-                                    <ScrollArea className="h-[calc(100vh-300px)] md:h-[calc(100vh-280px)] rounded-md border p-2 professional-card custom-scrollbar">
+                                    <ScrollArea className="h-[calc(100vh-221px)] md:h-[calc(100vh-201px)] rounded-md border p-2 professional-card custom-scrollbar">
                                         <Accordion type="single" collapsible className="w-full">
                                             {textSets.map((textSet, index) => (
                                                 <motion.div
