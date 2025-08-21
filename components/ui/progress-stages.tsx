@@ -77,21 +77,31 @@ const stages = [
 const ProgressStages: React.FC<ProgressStagesProps> = ({ isVisible }) => {
   const [currentStage, setCurrentStage] = useState(0);
   const [completedStages, setCompletedStages] = useState<number[]>([]);
+  const [visibleStages, setVisibleStages] = useState<number[]>([]);
 
   useEffect(() => {
     if (!isVisible) {
       setCurrentStage(0);
       setCompletedStages([]);
+      setVisibleStages([]);
       return;
     }
 
     const progressStages = async () => {
       for (let i = 0; i < stages.length; i++) {
+        // Make stage visible with fade-in
+        setVisibleStages(prev => [...prev, i]);
         setCurrentStage(i);
         
         await new Promise(resolve => {
           setTimeout(() => {
             setCompletedStages(prev => [...prev, i]);
+            // After 1 second, fade out the completed stage (except the last one)
+            if (i < stages.length - 1) {
+              setTimeout(() => {
+                setVisibleStages(prev => prev.filter(idx => idx !== i));
+              }, 1000);
+            }
             resolve(void 0);
           }, stages[i].duration);
         });
@@ -116,155 +126,191 @@ const ProgressStages: React.FC<ProgressStagesProps> = ({ isVisible }) => {
           {stages.map((stage, index) => {
             const isActive = currentStage === index;
             const isCompleted = completedStages.includes(index);
+            const isVisible = visibleStages.includes(index) || index === stages.length - 1;
             const Icon = stage.icon;
             
+            if (!isVisible && !isCompleted) return null;
+            
             return (
-              <motion.div
-                key={stage.id}
-                className={`flex items-center gap-4 p-4 rounded-xl backdrop-blur-sm border transition-all duration-500 ${
-                  isActive 
-                    ? 'bg-primary/10 border-primary/30 shadow-lg' 
-                    : isCompleted
-                    ? 'bg-green-500/10 border-green-500/30'
-                    : 'bg-background/20 border-border/20'
-                }`}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.4 }}
-              >
-                {/* Icon Container */}
+              <AnimatePresence key={stage.id}>
                 <motion.div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center relative overflow-hidden ${
-                    isActive
-                      ? 'bg-gradient-to-br from-primary to-accent'
+                  className={`flex items-center gap-4 p-4 rounded-xl backdrop-blur-sm border transition-all duration-500 ${
+                    isActive 
+                      ? 'bg-primary/10 border-primary/30 shadow-lg' 
                       : isCompleted
-                      ? 'bg-gradient-to-br from-green-500 to-emerald-500'
-                      : 'bg-muted'
+                      ? 'bg-green-500/10 border-green-500/30'
+                      : 'bg-background/20 border-border/20'
                   }`}
-                  animate={{
-                    scale: isActive ? [1, 1.05, 1] : 1,
-                    rotate: isActive ? [0, 5, -5, 0] : 0
-                  }}
-                  transition={{
-                    scale: { duration: 1.5, repeat: isActive ? Infinity : 0 },
-                    rotate: { duration: 2, repeat: isActive ? Infinity : 0 }
+                  initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.8 }}
+                  transition={{ 
+                    duration: 0.6,
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 25
                   }}
                 >
+                  {/* Icon Container */}
+                  <motion.div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center relative overflow-hidden ${
+                      isActive
+                        ? 'bg-gradient-to-br from-primary to-accent'
+                        : isCompleted
+                        ? 'bg-gradient-to-br from-green-500 to-emerald-500'
+                        : 'bg-muted'
+                    }`}
+                    animate={{
+                      scale: isActive ? [1, 1.1, 1] : 1,
+                      rotate: isActive ? [0, 10, -10, 0] : 0
+                    }}
+                    transition={{
+                      scale: { duration: 2, repeat: isActive ? Infinity : 0 },
+                      rotate: { duration: 3, repeat: isActive ? Infinity : 0 }
+                    }}
+                  >
+                    {isActive && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent"
+                        animate={{ x: ['-100%', '100%'] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: 'easeInOut'
+                        }}
+                      />
+                    )}
+                    
+                    {isCompleted ? (
+                      <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ 
+                          type: 'spring', 
+                          stiffness: 600, 
+                          damping: 20,
+                          delay: 0.2
+                        }}
+                      >
+                        <CheckCircle className="w-6 h-6 text-white" />
+                      </motion.div>
+                    ) : isActive ? (
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+                      >
+                        <Loader2 className="w-6 h-6 text-white" />
+                      </motion.div>
+                    ) : (
+                      <Icon className="w-6 h-6 text-muted-foreground" />
+                    )}
+                  </motion.div>
+
+                  {/* Content */}
+                  <div className="flex-1">
+                    <motion.h4 
+                      className={`font-semibold text-sm mb-1 ${
+                        isActive 
+                          ? 'text-primary' 
+                          : isCompleted
+                          ? 'text-green-600 dark:text-green-400'
+                          : 'text-muted-foreground'
+                      }`}
+                      animate={{
+                        opacity: isActive ? [0.7, 1, 0.7] : 1
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: isActive ? Infinity : 0
+                      }}
+                    >
+                      {stage.title}
+                    </motion.h4>
+                    <motion.p 
+                      className="text-xs text-muted-foreground"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      {stage.description}
+                    </motion.p>
+                  </div>
+
+                  {/* Progress Indicator */}
                   {isActive && (
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
-                      animate={{ x: ['-100%', '100%'] }}
+                      className="w-3 h-3 bg-primary rounded-full"
+                      animate={{
+                        scale: [1, 1.8, 1],
+                        opacity: [1, 0.4, 1]
+                      }}
                       transition={{
                         duration: 1.5,
-                        repeat: Infinity,
-                        ease: 'easeInOut'
+                        repeat: Infinity
                       }}
                     />
                   )}
                   
-                  {isCompleted ? (
+                  {isCompleted && (
                     <motion.div
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 15 }}
-                    >
-                      <CheckCircle className="w-6 h-6 text-white" />
-                    </motion.div>
-                  ) : isActive ? (
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                    >
-                      <Loader2 className="w-6 h-6 text-white" />
-                    </motion.div>
-                  ) : (
-                    <Icon className="w-6 h-6 text-muted-foreground" />
+                      className="w-3 h-3 bg-green-500 rounded-full"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ 
+                        type: 'spring', 
+                        stiffness: 600, 
+                        damping: 20,
+                        delay: 0.2
+                      }}
+                    />
                   )}
                 </motion.div>
-
-                {/* Content */}
-                <div className="flex-1">
-                  <motion.h4 
-                    className={`font-semibold text-sm mb-1 ${
-                      isActive 
-                        ? 'text-primary' 
-                        : isCompleted
-                        ? 'text-green-600 dark:text-green-400'
-                        : 'text-muted-foreground'
-                    }`}
-                    animate={{
-                      opacity: isActive ? [0.7, 1, 0.7] : 1
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: isActive ? Infinity : 0
-                    }}
-                  >
-                    {stage.title}
-                  </motion.h4>
-                  <p className="text-xs text-muted-foreground">
-                    {stage.description}
-                  </p>
-                </div>
-
-                {/* Progress Indicator */}
-                {isActive && (
-                  <motion.div
-                    className="w-2 h-2 bg-primary rounded-full"
-                    animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [1, 0.5, 1]
-                    }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity
-                    }}
-                  />
-                )}
-                
-                {isCompleted && (
-                  <motion.div
-                    className="w-2 h-2 bg-green-500 rounded-full"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 15 }}
-                  />
-                )}
-              </motion.div>
+              </AnimatePresence>
             );
           })}
         </div>
 
         {/* Overall Progress Bar */}
         <motion.div
-          className="mt-6 bg-muted rounded-full h-2 overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          className="mt-6 bg-muted rounded-full h-3 overflow-hidden shadow-inner"
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
         >
           <motion.div
-            className="h-full bg-gradient-to-r from-primary to-accent rounded-full"
+            className="h-full bg-gradient-to-r from-primary via-accent to-primary rounded-full relative overflow-hidden"
             initial={{ width: '0%' }}
             animate={{ 
               width: `${((completedStages.length + (currentStage < stages.length ? 0.5 : 0)) / stages.length) * 100}%`
             }}
-            transition={{ duration: 0.5, ease: 'easeInOut' }}
-          />
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+          >
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }}
+            />
+          </motion.div>
         </motion.div>
 
         {/* Progress Text */}
         <motion.p
-          className="text-center text-sm text-muted-foreground mt-3"
+          className="text-center text-sm font-medium text-muted-foreground mt-4"
           animate={{
-            opacity: [0.7, 1, 0.7]
+            opacity: [0.7, 1, 0.7],
+            scale: [1, 1.02, 1]
           }}
           transition={{
-            duration: 2,
+            duration: 2.5,
             repeat: Infinity
           }}
         >
           {completedStages.length === stages.length 
-            ? '🎉 Ready to create magic!' 
+            ? '✨ Ready to create magic!' 
             : `Processing... ${Math.round(((completedStages.length + 0.5) / stages.length) * 100)}%`
           }
         </motion.p>

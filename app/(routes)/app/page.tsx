@@ -296,7 +296,7 @@ const Page = () => {
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
                                 <motion.div 
-                                    className="min-h-[662px] w-full max-w-[622px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
+                                    className="min-h-[584px] w-full max-w-[544px] p-4 md:p-6 professional-card rounded-2xl relative overflow-hidden hover-lift group"
                                     whileHover={{ scale: 1.01 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 >
