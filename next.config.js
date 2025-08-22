@@ -10,25 +10,20 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   
-  // Compress JavaScript and CSS
-  swcMinify: true,
-  
-  // Enable experimental features for performance
+  // Enable experimental features for performance (removed deprecated options)
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['lucide-react', 'framer-motion', '@radix-ui/react-icons'],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
+  },
+  
+  // Turbopack configuration (moved from experimental.turbo)
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
       },
     },
   },
-  
-  // Optimize font loading
-  optimizeFonts: true,
   
   // Reduce bundle size
   modularizeImports: {
