@@ -97,49 +97,26 @@ const Page = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
     
-        // Get the display container dimensions for proper scaling
-        const displayContainer = document.querySelector('.min-h-\[573px\]');
-        const containerRect = displayContainer?.getBoundingClientRect();
-        const containerWidth = containerRect ? containerRect.width - 32 : 614; // subtract padding
-        const containerHeight = containerRect ? containerRect.height - 32 : 573;
-    
         const bgImg = new (window as any).Image();
         bgImg.crossOrigin = "anonymous";
         bgImg.onload = () => {
-            // Calculate the actual displayed image dimensions within the container
-            const imageAspectRatio = bgImg.naturalWidth / bgImg.naturalHeight;
-            const containerAspectRatio = containerWidth / containerHeight;
-            
-            let displayedWidth, displayedHeight;
-            if (imageAspectRatio > containerAspectRatio) {
-                // Image is wider - constrained by width
-                displayedWidth = containerWidth;
-                displayedHeight = containerWidth / imageAspectRatio;
-            } else {
-                // Image is taller - constrained by height
-                displayedHeight = containerHeight;
-                displayedWidth = containerHeight * imageAspectRatio;
-            }
-            
-            // Set canvas to high resolution for better quality
-            const scale = 2; // 2x for high DPI
-            canvas.width = bgImg.naturalWidth * scale;
-            canvas.height = bgImg.naturalHeight * scale;
-            
-            // Scale the canvas context
-            ctx.scale(scale, scale);
+            // Use original image dimensions for high quality output
+            canvas.width = bgImg.naturalWidth;
+            canvas.height = bgImg.naturalHeight;
             
             // Clear the canvas first
-            ctx.clearRect(0, 0, bgImg.naturalWidth, bgImg.naturalHeight);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Draw the background image at original resolution
-            ctx.drawImage(bgImg, 0, 0, bgImg.naturalWidth, bgImg.naturalHeight);
+            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     
             textSets.forEach(textSet => {
                 ctx.save();
                 
-                // Calculate font size scaling based on image vs display ratio
-                const fontScaleRatio = bgImg.naturalWidth / displayedWidth;
+                // Scale font size to match the original image size vs display size
+                // Assuming display container max width of ~580px (614-32 padding)
+                const displayWidth = 580;
+                const fontScaleRatio = canvas.width / displayWidth;
                 const scaledFontSize = textSet.fontSize * fontScaleRatio;
                 
                 ctx.font = `${textSet.fontWeight} ${scaledFontSize}px ${textSet.fontFamily}`;
@@ -148,9 +125,9 @@ const Page = () => {
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 
-                // Calculate position based on the natural image dimensions
-                const x = bgImg.naturalWidth * (textSet.left + 50) / 100;
-                const y = bgImg.naturalHeight * (50 - textSet.top) / 100;
+                // Calculate position based on the canvas dimensions
+                const x = canvas.width * (textSet.left + 50) / 100;
+                const y = canvas.height * (50 - textSet.top) / 100;
     
                 ctx.translate(x, y);
                 
