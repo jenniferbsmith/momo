@@ -26,6 +26,7 @@ const Page = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const handleUploadImage = () => {
         if (fileInputRef.current) {
@@ -99,21 +100,32 @@ const Page = () => {
         const bgImg = new (window as any).Image();
         bgImg.crossOrigin = "anonymous";
         bgImg.onload = () => {
-            canvas.width = bgImg.width;
-            canvas.height = bgImg.height;
-    
+            // Use original image dimensions for high quality output
+            canvas.width = bgImg.naturalWidth;
+            canvas.height = bgImg.naturalHeight;
+            
+            // Clear the canvas first
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw the background image at original resolution
             ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
     
             textSets.forEach(textSet => {
                 ctx.save();
                 
-                ctx.font = `${textSet.fontWeight} ${textSet.fontSize * 3}px ${textSet.fontFamily}`;
+                // Scale font size to match the original image size vs display size
+                // Assuming display container max width of ~580px (614-32 padding)
+                const displayWidth = 580;
+                const fontScaleRatio = canvas.width / displayWidth;
+                const scaledFontSize = textSet.fontSize * fontScaleRatio;
+                
+                ctx.font = `${textSet.fontWeight} ${scaledFontSize}px ${textSet.fontFamily}`;
                 ctx.fillStyle = textSet.color;
                 ctx.globalAlpha = textSet.opacity;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.letterSpacing = `${textSet.letterSpacing}px`;
-    
+                
+                // Calculate position based on the canvas dimensions
                 const x = canvas.width * (textSet.left + 50) / 100;
                 const y = canvas.height * (50 - textSet.top) / 100;
     
@@ -136,19 +148,21 @@ const Page = () => {
                 if (textSet.letterSpacing === 0) {
                     ctx.fillText(textSet.text, 0, 0);
                 } else {
+                    // Handle letter spacing manually
                     const chars = textSet.text.split('');
-                    let currentX = 0;
+                    const scaledLetterSpacing = textSet.letterSpacing * fontScaleRatio;
+                    
                     const totalWidth = chars.reduce((width, char, i) => {
                         const charWidth = ctx.measureText(char).width;
-                        return width + charWidth + (i < chars.length - 1 ? textSet.letterSpacing : 0);
+                        return width + charWidth + (i < chars.length - 1 ? scaledLetterSpacing : 0);
                     }, 0);
                     
-                    currentX = -totalWidth / 2;
+                    let currentX = -totalWidth / 2;
                     
                     chars.forEach((char, i) => {
                         const charWidth = ctx.measureText(char).width;
                         ctx.fillText(char, currentX + charWidth / 2, 0);
-                        currentX += charWidth + textSet.letterSpacing;
+                        currentX += charWidth + scaledLetterSpacing;
                     });
                 }
                 ctx.restore();
@@ -158,7 +172,7 @@ const Page = () => {
                 const removedBgImg = new (window as any).Image();
                 removedBgImg.crossOrigin = "anonymous";
                 removedBgImg.onload = () => {
-                    ctx.drawImage(removedBgImg, 0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(removedBgImg, 0, 0, bgImg.naturalWidth, bgImg.naturalHeight);
                     triggerDownload();
                 };
                 removedBgImg.src = removedBgImageUrl;
@@ -218,7 +232,7 @@ const Page = () => {
                         <div className="flex flex-col items-center md:items-start justify-start w-full md:w-1/2 gap-4">
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
-                            <div className="min-h-[573px] w-full max-w-[614px] p-2 md:p-4 border border-border rounded-lg relative overflow-hidden">
+                            <div ref={containerRef} className="min-h-[573px] w-full max-w-[614px] p-2 md:p-4 border border-border rounded-lg relative overflow-hidden">
                                 {isImageSetupDone ? (
                                     <Image
                                         src={selectedImage} 

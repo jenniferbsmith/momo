@@ -388,7 +388,7 @@ const ContactPage = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button asChild size="lg" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-                    <Link href="/welcome">
+                    <Link href="/app">
                       <Zap className="w-5 h-5 mr-2" />
                       Try Our Editor
                     </Link>

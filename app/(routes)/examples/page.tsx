@@ -306,7 +306,7 @@ const ExamplesPage = () => {
             
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button asChild className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-                <Link href="/welcome">
+                <Link href="/app">
                   <Play className="w-4 h-4 mr-2" />
                   Try Now
                 </Link>
@@ -542,7 +542,7 @@ const ExamplesPage = () => {
                                 className="p-2 bg-white/20 rounded-full text-white hover:bg-white/30 transition-all duration-300"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  window.open('/welcome', '_blank');
+                                  window.open('/app', '_blank');
                                 }}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
@@ -701,7 +701,7 @@ const ExamplesPage = () => {
               size="lg" 
               className="text-xl px-12 py-6 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-2xl hover:shadow-3xl transition-all duration-500"
             >
-              <Link href="/welcome">
+              <Link href="/app">
                 Get Started Now
                 <Play className="w-6 h-6 ml-2" />
               </Link>
