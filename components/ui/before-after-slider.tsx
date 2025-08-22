@@ -31,7 +31,7 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ className = "" })
     },
     {
       before: "/images/before-after/bear.png",
-      after: "/images/before-after/Screenshot 2025-08-16 142135.jpg"", 
+      after: "/images/before-after/Screenshot 2025-08-16 142135.jpg", 
       title: "Wildlife Artistry",
       description: "Create captivating wildlife compositions with professional text effects"
     },
