@@ -18,25 +18,25 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ className = "" })
   // Curated before/after pairs
   const beforeAfterPairs = [
     {
-      before: "/images/before-after/car.jpg",
-      after: "/images/before-after/behind.webp",
+      before: "/images/before-after/main-u.jpg",
+      after: "/images/before-after/car.jpg",
       title: "Automotive Excellence",
       description: "Transform vehicle photography with stunning text-behind effects"
     },
     {
-      before: "/images/before-after/nature.png", 
-      after: "/images/before-after/life.png",
+      before: "/images/before-after/Screenshot 2025-08-16 142101.jpg", 
+      after: "/images/before-after/nature.png",
       title: "Nature Photography",
       description: "Bring life to natural landscapes with artistic text integration"
     },
     {
-      before: "/images/before-after/bear.png",
-      after: "/images/before-after/enjoy.png", 
+      before: "/images/before-after/Screenshot 2025-08-16 142135.jpg",
+      after: "/images/before-after/bear.png", 
       title: "Wildlife Artistry",
       description: "Create captivating wildlife compositions with professional text effects"
     },
     {
-      before: "/images/before-after/main-u.jpg",
+      before: "/images/before-after/Screenshot 2025-08-16 141900.jpg",
       after: "/images/before-after/sf.png",
       title: "Urban Scenes",
       description: "Transform cityscapes with dynamic text-behind-image designs"
