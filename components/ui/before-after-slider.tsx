@@ -18,9 +18,9 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ className = "" })
   // Curated before/after pairs
   const beforeAfterPairs = [
     {
-      before: "/images/before-after/text-behind-image-car.png",
-      after: "/images/before-after/main-u.jpg",
-      title: "Automotive Excellence",
+      before: "/images/before-after/text-behind-image.jpg",
+      after: "/images/before-after/text-behind-image-ai.webp",
+      title: "Fearless Adventure",
       description: "Transform vehicle photography with stunning text-behind effects"
     },
     {
