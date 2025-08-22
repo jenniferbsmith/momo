@@ -99,10 +99,18 @@ const Page = () => {
         const bgImg = new (window as any).Image();
         bgImg.crossOrigin = "anonymous";
         bgImg.onload = () => {
-            canvas.width = bgImg.width;
-            canvas.height = bgImg.height;
+            // Use the original image dimensions to prevent cropping
+            const originalWidth = bgImg.naturalWidth || bgImg.width;
+            const originalHeight = bgImg.naturalHeight || bgImg.height;
+            
+            canvas.width = originalWidth;
+            canvas.height = originalHeight;
     
-            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+            // Clear the canvas first
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw the background image at full resolution
+            ctx.drawImage(bgImg, 0, 0, originalWidth, originalHeight);
     
             textSets.forEach(textSet => {
                 ctx.save();
