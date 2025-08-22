@@ -241,26 +241,28 @@ const HomePage = () => {
           transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
         >
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <motion.div 
-              className="flex items-center gap-3"
-              whileHover={{ scale: 1.02 }}
-            >
+            <Link href="https://text-behind-image.io" target="_blank" rel="noopener noreferrer">
               <motion.div 
-                className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent text-white"
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
+                className="flex items-center gap-3"
+                whileHover={{ scale: 1.02 }}
               >
-                <Wand2 className="w-6 h-6" />
+                <motion.div 
+                  className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent text-white"
+                  animate={{ rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
+                  <Wand2 className="w-6 h-6" />
+                </motion.div>
+                <div>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    Text Behind Image
+                  </h2>
+                  <p className="text-xs text-muted-foreground hidden md:block">
+                    Professional AI-Powered Editor
+                  </p>
+                </div>
               </motion.div>
-              <div>
-                <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Text Behind Image
-                </h2>
-                <p className="text-xs text-muted-foreground hidden md:block">
-                  Professional AI-Powered Editor
-                </p>
-              </div>
-            </motion.div>
+            </Link>
             
             <nav className="hidden md:flex items-center gap-6">
               <Link href="#why-choose-text-behind-image" className="text-muted-foreground hover:text-primary transition-colors">

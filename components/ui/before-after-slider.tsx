@@ -67,7 +67,7 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ className = "" })
   const currentPair = beforeAfterPairs[currentIndex];
 
   return (
-    <div className={`relative w-full max-w-4xl mx-auto ${className}`}>
+    <div className={`relative w-full max-w-3xl mx-auto ${className}`}>
       {/* Main Container */}
       <motion.div
         className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-background/50 to-background/80 backdrop-blur-xl border border-border/20"
@@ -105,7 +105,7 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ className = "" })
         </motion.div>
 
         {/* Slider Container */}
-        <div className="relative aspect-video bg-gradient-to-br from-muted/20 to-muted/40">
+        <div className="relative aspect-[4/3] bg-gradient-to-br from-muted/20 to-muted/40">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}

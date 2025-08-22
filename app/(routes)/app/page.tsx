@@ -181,10 +181,12 @@ const Page = () => {
         <>
             <div className='flex flex-col h-[calc(100vh-56px)]'>
                 <header className='sticky top-0 z-10 bg-background/95 backdrop-blur-sm flex flex-row items-center justify-between p-3 md:p-5 px-4 md:px-10'>
-                    <h2 className="text-xl md:text-2xl font-semibold tracking-tight">
-                        <span className="block md:hidden">Text Behind Image</span>
-                        <span className="hidden md:block">Text Behind Image Editor</span>
-                    </h2>
+                    <a href="https://text-behind-image.io" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">
+                            <span className="block md:hidden">Text Behind Image</span>
+                            <span className="hidden md:block">Text Behind Image Editor</span>
+                        </h2>
+                    </a>
                     
                     <div className='flex gap-2 md:gap-4 items-center'>
                         <input
