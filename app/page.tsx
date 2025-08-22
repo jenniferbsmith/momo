@@ -256,7 +256,7 @@ const HomePage = () => {
               <Link href="/examples" className="text-muted-foreground hover:text-primary transition-colors">
                 Gallery
               </Link>
-              <Link href="#faq" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link href="#FAQs" className="text-muted-foreground hover:text-primary transition-colors">
                 FAQ
               </Link>
               <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">
