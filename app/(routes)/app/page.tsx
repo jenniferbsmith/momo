@@ -26,6 +26,7 @@ const Page = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const handleUploadImage = () => {
         if (fileInputRef.current) {
@@ -96,34 +97,60 @@ const Page = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
     
+        // Get the display container dimensions for proper scaling
+        const displayContainer = document.querySelector('.min-h-\[573px\]');
+        const containerRect = displayContainer?.getBoundingClientRect();
+        const containerWidth = containerRect ? containerRect.width - 32 : 614; // subtract padding
+        const containerHeight = containerRect ? containerRect.height - 32 : 573;
+    
         const bgImg = new (window as any).Image();
         bgImg.crossOrigin = "anonymous";
         bgImg.onload = () => {
-            // Use the original image dimensions to prevent cropping
-            const originalWidth = bgImg.naturalWidth || bgImg.width;
-            const originalHeight = bgImg.naturalHeight || bgImg.height;
+            // Calculate the actual displayed image dimensions within the container
+            const imageAspectRatio = bgImg.naturalWidth / bgImg.naturalHeight;
+            const containerAspectRatio = containerWidth / containerHeight;
             
-            canvas.width = originalWidth;
-            canvas.height = originalHeight;
-    
+            let displayedWidth, displayedHeight;
+            if (imageAspectRatio > containerAspectRatio) {
+                // Image is wider - constrained by width
+                displayedWidth = containerWidth;
+                displayedHeight = containerWidth / imageAspectRatio;
+            } else {
+                // Image is taller - constrained by height
+                displayedHeight = containerHeight;
+                displayedWidth = containerHeight * imageAspectRatio;
+            }
+            
+            // Set canvas to high resolution for better quality
+            const scale = 2; // 2x for high DPI
+            canvas.width = bgImg.naturalWidth * scale;
+            canvas.height = bgImg.naturalHeight * scale;
+            
+            // Scale the canvas context
+            ctx.scale(scale, scale);
+            
             // Clear the canvas first
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, bgImg.naturalWidth, bgImg.naturalHeight);
             
-            // Draw the background image at full resolution
-            ctx.drawImage(bgImg, 0, 0, originalWidth, originalHeight);
+            // Draw the background image at original resolution
+            ctx.drawImage(bgImg, 0, 0, bgImg.naturalWidth, bgImg.naturalHeight);
     
             textSets.forEach(textSet => {
                 ctx.save();
                 
-                ctx.font = `${textSet.fontWeight} ${textSet.fontSize * 3}px ${textSet.fontFamily}`;
+                // Calculate font size scaling based on image vs display ratio
+                const fontScaleRatio = bgImg.naturalWidth / displayedWidth;
+                const scaledFontSize = textSet.fontSize * fontScaleRatio;
+                
+                ctx.font = `${textSet.fontWeight} ${scaledFontSize}px ${textSet.fontFamily}`;
                 ctx.fillStyle = textSet.color;
                 ctx.globalAlpha = textSet.opacity;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.letterSpacing = `${textSet.letterSpacing}px`;
-    
-                const x = canvas.width * (textSet.left + 50) / 100;
-                const y = canvas.height * (50 - textSet.top) / 100;
+                
+                // Calculate position based on the natural image dimensions
+                const x = bgImg.naturalWidth * (textSet.left + 50) / 100;
+                const y = bgImg.naturalHeight * (50 - textSet.top) / 100;
     
                 ctx.translate(x, y);
                 
@@ -144,19 +171,21 @@ const Page = () => {
                 if (textSet.letterSpacing === 0) {
                     ctx.fillText(textSet.text, 0, 0);
                 } else {
+                    // Handle letter spacing manually
                     const chars = textSet.text.split('');
-                    let currentX = 0;
+                    const scaledLetterSpacing = textSet.letterSpacing * fontScaleRatio;
+                    
                     const totalWidth = chars.reduce((width, char, i) => {
                         const charWidth = ctx.measureText(char).width;
-                        return width + charWidth + (i < chars.length - 1 ? textSet.letterSpacing : 0);
+                        return width + charWidth + (i < chars.length - 1 ? scaledLetterSpacing : 0);
                     }, 0);
                     
-                    currentX = -totalWidth / 2;
+                    let currentX = -totalWidth / 2;
                     
                     chars.forEach((char, i) => {
                         const charWidth = ctx.measureText(char).width;
                         ctx.fillText(char, currentX + charWidth / 2, 0);
-                        currentX += charWidth + textSet.letterSpacing;
+                        currentX += charWidth + scaledLetterSpacing;
                     });
                 }
                 ctx.restore();
@@ -166,7 +195,7 @@ const Page = () => {
                 const removedBgImg = new (window as any).Image();
                 removedBgImg.crossOrigin = "anonymous";
                 removedBgImg.onload = () => {
-                    ctx.drawImage(removedBgImg, 0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(removedBgImg, 0, 0, bgImg.naturalWidth, bgImg.naturalHeight);
                     triggerDownload();
                 };
                 removedBgImg.src = removedBgImageUrl;
@@ -224,7 +253,7 @@ const Page = () => {
                         <div className="flex flex-col items-center md:items-start justify-start w-full md:w-1/2 gap-4">
                             <canvas ref={canvasRef} style={{ display: 'none' }} />
                             
-                            <div className="min-h-[573px] w-full max-w-[614px] p-2 md:p-4 border border-border rounded-lg relative overflow-hidden">
+                            <div ref={containerRef} className="min-h-[573px] w-full max-w-[614px] p-2 md:p-4 border border-border rounded-lg relative overflow-hidden">
                                 {isImageSetupDone ? (
                                     <Image
                                         src={selectedImage} 
