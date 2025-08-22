@@ -495,7 +495,7 @@ Our total liability for any claims related to our text-behind-image services sha
                       size="lg" 
                       className="text-xl px-12 py-6 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group"
                     >
-                      <Link href="/welcome">
+                      <Link href="/app">
                         <motion.div
                           className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100"
                           animate={{
@@ -549,7 +549,7 @@ Our total liability for any claims related to our text-behind-image services sha
                 {[
                   { href: "/privacy", title: "Privacy Policy", desc: "How we protect your data", icon: Shield },
                   { href: "/contact", title: "Contact Support", desc: "Get help anytime", icon: Users },
-                  { href: "/welcome", title: "Try Our Editor", desc: "Create amazing designs", icon: Wand2 }
+                  { href: "/app", title: "Try Our Editor", desc: "Create amazing designs", icon: Wand2 }
                 ].map((link, index) => (
                   <motion.div
                     key={link.href}
