@@ -228,7 +228,7 @@ const HomePage = () => {
           transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
         >
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <Link href="https://text-behind-image.io" target="_blank" rel="noopener noreferrer">
+            <Link href="https://text-behind-image.io">
               <motion.div 
                 className="flex items-center gap-3"
                 whileHover={{ scale: 1.02 }}
