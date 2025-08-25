@@ -13,18 +13,29 @@ export default function robots(): MetadataRoute.Robots {
           '/api/',
           '/admin/',
           '/_next/',
-          '/private/',
-          '/*.json$'
+          '/private/'
         ],
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/_next/',
+          '/private/'
+        ],
         crawlDelay: 1
       },
       {
         userAgent: 'Bingbot',
         allow: '/',
+        disallow: [
+          '/api/',
+          '/admin/',
+          '/_next/',
+          '/private/'
+        ],
         crawlDelay: 1
       }
     ],
