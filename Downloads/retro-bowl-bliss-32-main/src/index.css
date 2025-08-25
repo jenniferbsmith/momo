@@ -1,0 +1,97 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+
+    --primary: 34 95% 50%;
+    --primary-foreground: 210 20% 98%;
+
+    --secondary: 220 34% 20%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 220 34% 20%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 220 34% 20%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 220 34% 20%;
+    --input: 220 34% 20%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-retro-dark-blue text-retro-white;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-retro-dark-blue;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-retro-gray rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-retro-light-gray;
+  }
+
+  /* Pixel Art Quality */
+  .pixel-art {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  /* Button styles */
+  .retro-button {
+    @apply bg-retro-red hover:bg-retro-orange text-white px-4 py-2 rounded-md transition-colors duration-200 font-pixel text-xs uppercase tracking-wider shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-retro-yellow focus:ring-opacity-50;
+  }
+
+  /* Game container */
+  .game-container {
+    @apply bg-retro-black rounded-lg shadow-xl overflow-hidden border-4 border-retro-gray;
+  }
+}

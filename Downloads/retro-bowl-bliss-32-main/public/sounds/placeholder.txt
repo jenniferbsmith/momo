@@ -1,0 +1,5 @@
+
+This directory contains sound files for the Retro Bowl game:
+- click.mp3: Button click sound
+- upgrade.mp3: Upgrade purchase sound
+- game-start.mp3: Sound played when game starts

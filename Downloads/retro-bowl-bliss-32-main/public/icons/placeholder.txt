@@ -1,0 +1,7 @@
+
+This directory contains icon SVG files:
+- twitter.svg
+- facebook.svg
+- instagram.svg
+- github.svg
+- default.svg (fallback)
